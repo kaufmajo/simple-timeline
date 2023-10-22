@@ -1,0 +1,46 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Service\AttributeService;
+use JK\DTF\DTF;
+
+// init
+$terminCollection = $terminCollection;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<div class="row <?= $elementAttributeService->getAttrValue('class') ?>" <?= $elementAttributeService->getAllWithout('class') ?> >
+    <div class="col-12">
+        <div class="position-relative">
+            <?php if ($terminCollection->current['termin_link']): ?>
+            <a href="<?= $terminCollection->current['termin_link'] ?>">
+                <?php endif; ?>
+                <picture>
+                    <source media="(min-width: 992px)" srcset="<?= $this->media($terminCollection->current['termin_image']) ?>?w=1200">
+                    <img src="<?= $this->media($terminCollection->current['termin_image']) ?>?w=800" alt="<?= $terminCollection->current['termin_betreff'] ?>" class="img-fluid w-100">
+                </picture>
+                <?php if ($terminCollection->current['termin_link']): ?>
+            </a>
+        <?php endif; ?>
+            <div class="position-absolute top-0 start-0 p-1 fw-light bg-light-subtle">
+                <?php if (TerminAnsichtEnum::TIMELINE->value === $terminCollection->current['termin_ansicht']): ?>
+                    <span class="me-1">
+                <?php if ($terminCollection->isTerminForThisYear()) : ?>
+                    <?= DTF::format($terminCollection->getDatum(), 'd MMMM') ?>
+                <?php else : ?>
+                    <?= DTF::format($terminCollection->getDatum(), 'd MMMM yyyy') ?>
+                <?php endif; ?>
+            </span>
+                    –
+                <?php endif; ?>
+                <span class="ms-1">
+                    <a class="link-body-emphasis text-decoration-none" href="/show/<?= $terminCollection->current['termin_id'] ?>">
+                        <?= $terminCollection->current['termin_betreff'] ?>
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

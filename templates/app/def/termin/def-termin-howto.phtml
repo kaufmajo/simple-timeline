@@ -1,0 +1,87 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi Info']) ?>
+<?php $this->push('stylesheet') ?>
+<?php $this->end() ?>
+<div class="container mb-5">
+    <h2 class="mt-5 mb-3 text-center">Information</h2>
+    <div class="alert alert-light fs-4" role="alert">
+        Standardmässig werden Termine angezeigt, welche bis zu <b><?= $default_def_tage ?></b> Tage in der Zukunft liegen.
+        Wird ein Suchausdruck verwendet, erweitert sich die Anzeige auf Termine, welche dem Suchausdruck entsprechen und bis zu <b><?= $search_def_tage ?></b> Tage in der Zukunft liegen.
+        Wird bei einem Termin keine Jahreszahl angezeigt, so bedeutet dies, das der Termin im aktuellen Jahr stattfindet.
+    </div>
+    <h2 class="mt-5 mb-3 text-center">Markierung</h2>
+    <div class="alert alert-light fs-4" role="alert">
+        <div class="d-flex flex-row mb-1">
+            <div class="p-2"><span class="me-3 fs-3 px-2 bg-warning text-dark fw-bold">12</span></div>
+            <div class="p-2">Gelb und Fett = Der Termin findet heute statt.</div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-2"><span class="me-3 fs-3 px-2 bg-warning text-dark">12</span></div>
+            <div class="p-2">Gelb = Der Termin findet diese Woche statt.</div>
+        </div>
+    </div>
+    <h2 class="mt-5 mb-3 text-center">Suchen</h2>
+    <div class="alert alert-secondary" role="alert">
+        <p>
+            Mehrere Suchausdrücke, mit einem Leerzeichen voneinander getrennt, werden mit einer <b>UND</b> Bedingung verknüpft:
+        </p>
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode('Bibellesen Freitag') ?>&submit-button=">Bibellesen Freitag</a>
+        </div>
+        <p>
+            Suche nach Terminen, in welchen der Ausdruck «Bibellesen» <b>und</b> der Ausdruck «Freitag» vorkommt.
+        </p>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <p>
+            Suchausdrücke können mit einer <b>ODER</b> Bedingung verknüpft werden, in dem man die Suchausdrücke durch ein Komma voneinander trennt:
+        </p>
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode('Freitag, Samstag') ?>&submit-button=">Freitag, Samstag</a>
+        </div>
+        <p>
+            Suche nach Terminen, in welchen der Ausdruck «Freitag» <b>oder</b> der Ausdruck «Samstag» vorkommt.
+        </p>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <p>
+            <b>UND</b> und <b>ODER</b> Bedingungen können miteinander kombiniert werden:
+        </p>
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode('Gottesdienst Sonntag, Bibellesen Freitag') ?>&submit-button=">Gottesdienst Sonntag, Bibellesen Freitag</a>
+        </div>
+        <p>
+            Suche nach Terminen, in welchen die beiden Ausdrücke «Gottesdienst» <b>und</b> «Sonntag» vorkommen, <b>oder</b> aber auch die beiden Ausdrücke «Bibellesen» <b>und</b> «Freitag».
+        </p>
+    </div>
+    <h2 class="mt-5 mb-3 text-center">Beispiele</h2>
+    <div class="alert alert-secondary" role="alert">
+        Es kann nach fast allen Ausdrücken gesucht werden, welche bei einem Termin sichtbar sind (die Uhrzeit eines Termins ausgenommen).
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode((new DateTime())->modify('next sunday')->format('d.m.Y')) ?>&submit-button="><?= (new DateTime())->modify('next sunday')->format('d.m.Y') ?></a>
+        </div>
+        <p>
+            Suche nach Terminen am <?= (new DateTime())->modify('next sunday')->format('d.m.Y') ?>
+        </p>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode('Januar ' . (new DateTime())->add(new DateInterval('P1Y'))->format('Y')) ?>&submit-button=">
+                Januar <?= (new DateTime())->add(new DateInterval('P1Y'))->format('Y') ?>
+            </a>
+        </div>
+        <p>
+            Suche nach Terminen, welche im «Januar 2024» stattfinden.
+        </p>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-light" role="alert">
+            <a href="/?search_suchtext=<?= urlencode('Anlass') ?>&submit-button=">Anlass</a>
+        </div>
+        <p>
+            Suche nach Terminen, welche mit der Kategorie «Anlass» eingetragen wurden. <br>
+            <span class="text-secondary"><i class="bi bi-info-circle"></i> Die Kategorie ist bei einem Termin nicht sichtbar, wird aber dennoch beim Erfassen eines Termins immer mit angegeben.</span>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<?php
+
+use App\Service\AttributeService;
+
+// init
+$terminCollection = $terminCollection;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<figure class="text-center fw-light" style="margin-top: 6rem; margin-bottom: 5rem;">
+    <blockquote class="blockquote">
+        <p class="mb-0"><?= $terminCollection->current['termin_betreff'] ?></p>
+    </blockquote>
+    <?php if ($terminCollection->current['termin_mitvon']) : ?>
+        <figcaption class="blockquote-footer">
+            <?= $terminCollection->current['termin_mitvon'] ?> —
+        </figcaption>
+    <?php endif; ?>
+    <?php if ($terminCollection->current['termin_link']) : ?>
+        <a class="icon-link" href="<?= $this->escape($terminCollection->current['termin_link']) ?>">
+            <?= $this->escape($terminCollection->current['termin_link_titel'] ?? 'Link') ?>
+        </a>
+    <?php endif ?>
+</figure>

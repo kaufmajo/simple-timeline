@@ -1,0 +1,160 @@
+<?php
+
+use App\Enum\TerminStatusEnum;
+use App\Service\UrlpoolService;
+
+// init
+$defTerminSearchForm = $defTerminSearchForm;
+$informationCollection = $informationCollection;
+$terminCollection = $terminCollection;
+$headerCollection = $headerCollection;
+$mediaCollection = $mediaCollection;
+$searchValues = $searchValues;
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi Termine']) ?>
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/def-termin-index.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/def-termin-index.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<div class="container">
+    <?php if ($headerCollection->count()) : ?>
+        <div class="row">
+            <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+                <?php while ($headerCollection->current) : ?>
+                    <?php if (TerminStatusEnum::BILD->value === $headerCollection->current['termin_status']) : ?>
+                        <?php $this->insert('app-partial::picture', [
+                            'terminCollection' => $headerCollection,
+                            'attributes' => ['class' => 'my-5'],
+                        ]); ?>
+                    <?php else: ?>
+                        <?php $this->insert('app-partial::header', [
+                            'terminCollection' => $headerCollection,
+                        ]); ?>
+                    <?php endif; ?>
+                    <?php $headerCollection->next(); ?>
+                <?php endwhile; ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <figure class="text-center fw-light my-5">
+            <blockquote class="blockquote text-secondary">
+                <p class="mb-0 fs-3">Evangelische Gemeinde Limmattal</p>
+            </blockquote>
+        </figure>
+    <?php endif; ?>
+    <div class="row mt-1 mb-5">
+        <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+            <?php if ($defTerminSearchForm->getMessages()) : ?>
+                <?php $this->insert('partial::formerror', ['form' => $defTerminSearchForm, 'showMessages' => true]); ?>
+            <?php endif; ?>
+            <?php $defTerminSearchForm->setAttributes([])->prepare() ?>
+            <form action="<?= $defTerminSearchForm->getAttribute('action') ?>"
+                  method="<?= $defTerminSearchForm->getAttribute('method') ?>"
+                  name="<?= $defTerminSearchForm->getName() ?>"
+                  id="<?= $defTerminSearchForm->getName() ?>">
+                <?php $this->insert('helper::input', ['element' => $defTerminSearchForm->get('cache')]) ?>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><a href="/howto" target="tab_howto"><i class="bi bi-info-circle text-dark"></i></a></span>
+                    <?php $this->insert('helper::input', [
+                        'element' => $defTerminSearchForm->get('search_suchtext'),
+                        'attributes' => [
+                            'placeholder' => '',
+                            'class' => 'form-control text-sm-center border-end-0',
+                            "autocomplete" => "off",
+                        ],
+                        'datalist' => [
+                            'list' => $datalist,
+                            'id' => 'search-datalist',
+                        ],
+                        'showErrorMessage' => false,
+                    ]) ?>
+                    <span class="input-group-text m-0 p-0">
+                        <button id="input-search-submit" name="submit-button" type="submit"
+                                class="btn btn-light"> <i class="bi bi-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <?php if ($informationCollection->count()) : ?>
+        <div class="row">
+            <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+                <?php while ($informationCollection->current) : ?>
+                    <?php if (TerminStatusEnum::MITTEILUNG->value === $informationCollection->current['termin_status']) : ?>
+                        <?php $this->insert('app-partial::event-quote', [
+                            'terminCollection' => $informationCollection,
+//                            'attributes' => ['class' => 'my-5'],
+                        ]); ?>
+                    <?php else: ?>
+                        <?php $this->insert('app-partial::info', [
+                            'terminCollection' => $informationCollection,
+//                            'attributes' => ['class' => 'my-5'],
+                        ]); ?>
+                    <?php endif; ?>
+                    <hr class="my-5">
+                    <?php $informationCollection->next(); ?>
+                <?php endwhile; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if ($mediaCollection->count()) : ?>
+        <div class="row">
+            <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+                <?php while ($mediaCollection->current) : ?>
+                    <?php $this->insert('app-partial::info-media', [
+                        'mediaLoop' => $mediaCollection,
+//                        'attributes' => ['class' => 'my-5'],
+                    ]); ?>
+                    <?php $mediaCollection->next(); ?>
+                <?php endwhile; ?>
+                <hr class="my-5">
+            </div>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+            <?php if ($terminCollection->count()) : ?>
+                <?php while ($terminCollection->current) : ?>
+                    <?php if ($terminCollection->isTerminVisibleInTimeline()) : ?>
+                        <?php if (!$terminCollection->hasInMemoryIfNotOverwrite('anchor-date', $terminCollection->current['datum_datum'])) : ?>
+                            <a class="mt-1" id="<?= UrlpoolService::getAnchorString($terminCollection->getFromMemory('anchor-date')) ?>"></a>
+                        <?php endif; ?>
+                        <?php if (TerminStatusEnum::MITTEILUNG->value === $terminCollection->current['termin_status']) : ?>
+                            <?php $this->insert('app-partial::event-quote', [
+                                'terminCollection' => $terminCollection,
+//                                'attributes' => ['class' => 'my-5'],
+                            ]); ?>
+                        <?php elseif (TerminStatusEnum::BILD->value === $terminCollection->current['termin_status']) : ?>
+                            <?php $this->insert('app-partial::picture', [
+                                'terminCollection' => $terminCollection,
+                                'attributes' => ['class' => 'my-5'],
+                            ]); ?>
+                        <?php else: ?>
+                            <?php $this->insert('app-partial::event', [
+                                'terminCollection' => $terminCollection,
+//                                'attributes' => ['class' => 'mt-5 mb-4'],
+                            ]); ?>
+                        <?php endif; ?>
+                        <?php if (
+                            !$terminCollection->isLast()
+                            && TerminStatusEnum::BILD->value !== $terminCollection->next['termin_status']
+                            && TerminStatusEnum::BILD->value !== $terminCollection->current['termin_status']
+                        ): ?>
+                            <hr class="my-5">
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php
+                    $terminCollection->next();
+                    ?>
+                <?php endwhile; ?>
+            <?php else : ?>
+                <div class="alert alert-warning text-center my-3 fw-bold" role="alert">
+                    Es wurden keine Termine gefunden.
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

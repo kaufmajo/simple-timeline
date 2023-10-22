@@ -1,0 +1,111 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+use JK\DTF\DTF;
+
+// init
+$terminCollection = $terminCollection;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+// classes
+$cardClass = $terminCollection->isTerminForThisDay() && TerminStatusEnum::GESTRICHEN->value === $terminCollection->current['termin_status'] ? 'opacity-25' : '';
+$cardClass .= TerminAnsichtEnum::NONE->value === $terminCollection->current['termin_ansicht'] ? ' bg-danger-subtle' : '';
+$wrapperTag = $terminCollection->isTerminForThisDay() && TerminStatusEnum::GESTRICHEN->value === $terminCollection->current['termin_status'] ? ['del'] : [];
+$dayClass = $terminCollection->isTerminThisWeek() && TerminStatusEnum::GESTRICHEN->value !== $terminCollection->current['termin_status'] ? 'px-2 bg-warning text-dark' : '';
+$dayClass .= $terminCollection->isTerminToday() && TerminStatusEnum::GESTRICHEN->value !== $terminCollection->current['termin_status'] ? ' fw-bold' : $dayClass;
+?>
+<div class="row <?= $cardClass ?> <?= $elementAttributeService->getAttrValue('class') ?>" <?= $elementAttributeService->getAllWithout('class') ?> >
+    <div class="col-3 col-sm-2">
+        <p class="fw-light my-0">
+            <?php if ($terminCollection->isTerminForThisYear()) : ?>
+                <span class="text-secondary"><?= DTF::format($terminCollection->getDatum(), 'EEEE') ?></span>
+                <br>
+                <span class="fs-3 <?= $dayClass ?>"><?= DTF::format($terminCollection->getDatum(), 'd') ?></span>
+                <br>
+                <?= DTF::format($terminCollection->getDatum(), 'MMMM') ?>
+            <?php else : ?>
+                <span class="text-secondary"><?= DTF::format($terminCollection->getDatum(), 'EEEE') ?></span>
+                <br>
+                <span class="fs-3 <?= $dayClass ?>"><?= DTF::format($terminCollection->getDatum(), 'd') ?></span>
+                <br>
+                <?= DTF::format($terminCollection->getDatum(), 'MMMM yyyy') ?>
+            <?php endif; ?>
+        </p>
+    </div>
+
+    <?php if ($terminCollection->current['termin_image'] && TerminStatusEnum::BILD->value !== $terminCollection->current['termin_status']): ?>
+        <?php $colClass = "col-7 col-sm-8" ?>
+    <?php else: ?>
+        <?php $colClass = "col-9 col-sm-10" ?>
+    <?php endif; ?>
+
+    <div class="<?= $colClass ?> gx-5">
+        <?php if ($terminCollection->isTerminForThisDay()): ?>
+            <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]); ?>
+            <p class="fw-light my-0">
+                <span class="fw-light">
+                    <a class="link-body-emphasis text-decoration-none" href="/show/<?= $terminCollection->current['termin_id'] ?>">
+                            <?= $this->escape($terminCollection->current['termin_betreff']) ?>
+                    </a>
+                </span>
+                <?php if ($terminCollection->current['_anzahl_tage'] > 1) : ?>
+                    <span class="opacity-50">
+                        (Tag <?= intval((new DateTime($terminCollection->current['termin_datum_start']))->diff($terminCollection->getDatum())->format('%R%a')) + 1 ?>/<?= $terminCollection->current['_anzahl_tage'] ?>)
+                    </span>
+                <?php endif; ?>
+                <?php if ($terminCollection->current['termin_mitvon']) : ?>
+                    <br> mit <?= $this->escape($terminCollection->current['termin_mitvon']) ?>
+                <?php endif ?>
+                <?php if (!$terminCollection->current['termin_zeit_ganztags']) : ?>
+                    <br><?= $this->escape(substr($terminCollection->current['termin_zeit_start'], 0, 5)) . '' ?> Uhr
+                <?php endif; ?>
+                <?php if ($terminCollection->current['termin_text']) : ?>
+                    <span class="fw-light">
+                        <br><br><?= nl2br($this->escape($terminCollection->current['termin_text'])) ?>
+                    </span>
+                <?php endif; ?>
+                <?php if ($terminCollection->current['termin_label'] || $terminCollection->current['termin_link']): ?>
+                    <br>
+                    <?php if ($terminCollection->current['termin_label']) : ?>
+                        <br>
+                        <i class="bi bi-info-circle"></i> <?= $this->escape($terminCollection->current['termin_label']) ?>
+                    <?php endif; ?>
+                    <?php if ($terminCollection->current['termin_link']) : ?>
+                        <br>
+                        <a class="icon-link d-block text-decoration-none" href="<?= $this->escape($terminCollection->current['termin_link']) ?>">
+                            <i class="bi bi-link"></i> <?= $this->escape($terminCollection->current['termin_link_titel'] ?? 'Link') ?>
+                        </a>
+                    <?php endif ?>
+                <?php endif; ?>
+                <?php if (!$terminCollection->isTerminToday()): ?>
+                    <?php if ($terminCollection->current['_def_neu']) : ?>
+                        <!-- new indicator -->
+                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold me-1 mt-1">Neu</span>
+                    <?php elseif ($terminCollection->current['_def_updated']) : ?>
+                        <!-- update indicator -->
+                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold me-1 mt-1">Aktualisiert</span>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </p>
+            <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]); ?>
+        <?php endif ?>
+
+    </div>
+    <?php if ($terminCollection->current['termin_image'] && TerminStatusEnum::BILD->value !== $terminCollection->current['termin_status']): ?>
+        <div class="col-2 col-sm-2">
+            <div class="float-end border-start">
+                <img src="<?= $this->media($terminCollection->current["termin_image"]) ?>?w=50" alt="image"
+                     style="max-width: 50px;
+                     filter: grayscale(100%);
+                     opacity:0.2;
+                     box-shadow: -5px 5px 5px rgb(128,128,128);
+                     border-top-right-radius: 5px;
+                "/>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>

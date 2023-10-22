@@ -1,0 +1,13 @@
+.idea
+.phpcs-cache
+composer.phar
+clover.xml
+coveralls-upload.json
+phpunit.xml
+composer.lock
+
+data/
+nbproject/
+public/vendor
+vendor/
+script/sync/

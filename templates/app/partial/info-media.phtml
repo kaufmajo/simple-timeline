@@ -1,0 +1,18 @@
+<?php
+
+use App\Service\AttributeService;
+
+// init
+$mediaLoop = $mediaLoop;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<div class="<?= $elementAttributeService->getAttrValue('class') ?>">
+    <p class="fw-light">
+        <a class="icon-link text-decoration-none" href="/media/<?= $this->escape($mediaLoop->current['media_id']) ?>">
+            <i class="bi bi-box-arrow-down"></i> <?= $this->escape($mediaLoop->current['media_anzeige'] ?: $mediaLoop->current['media_name']) ?>
+        </a>
+    </p>
+</div>

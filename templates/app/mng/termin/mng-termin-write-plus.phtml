@@ -1,0 +1,31 @@
+<?php $this->layout('layout::default', ['title' => $myInitConfig['label'] . ' Termine']); ?>
+<div class="container mb-5">
+    <br>
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">Eintrag verschieben + 7 Tage</h1>
+        </div>
+    </div>
+    <div class="alert alert-secondary" role="alert">
+        <?php if (-1 !== $terminEntity->getEntityId()) : // if is not bulk ?>
+            <table class="table">
+                <?php foreach ($terminEntity->getEntityLabel() as $key => $value): ?>
+                    <tr>
+                        <th scope="row" class="align-top">
+                            <?= $this->escapeHtml($key) ?>:
+                        </th>
+                        <td class="align-top">
+                            <?= $this->escapeHtml($value ?? '') ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+        <br>
+        <form action="" method="post">
+            <input type="hidden" name="id" value="<?= $this->escapeHtmlAttr($terminEntity->getEntityId()) ?>"/>
+            <input class="btn btn-danger" type="submit" name="confirm" value="Speichern"/>
+            <input class="btn btn-dark" type="submit" name="cancel" value="Abbrechen"/>
+        </form>
+    </div>
+</div>

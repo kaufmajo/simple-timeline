@@ -1,0 +1,12 @@
+<?php if ($notifications) : ?>
+    <?php foreach ($notifications as $key => $value): ?>
+        <div id="flash-<?= $key ?>" class="m-5 alert alert-<?= $key ?> position-fixed top-50 start-50 translate-middle fw-bold border-5" role="alert">
+            <?= 'default' === $value ? 'Aktion erfolgreich ausgeführt.' : $value ?>
+        </div>
+        <script>
+            setTimeout(function () {
+                document.getElementById("flash-<?= $key ?>").style.display = 'none';
+            }, 3000);
+        </script>
+    <?php endforeach ?>
+<?php endif; ?>

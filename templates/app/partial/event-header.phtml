@@ -1,0 +1,96 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+
+// init
+$terminCollection = $terminCollection;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+?>
+<div class="d-flex flex-wrap flex-md-row flex-column-reverse mb-5">
+    <div class="d-flex flex-row flex-wrap" style="gap: 3px;">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="ctrl-check-<?= $terminCollection->key() ?>" data-id="<?= $terminCollection->current['termin_id'] ?>" <?php if (!$terminCollection->isTerminForThisDay()): ?>disabled="disabled"<?php endif; ?>>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"> Aktion <span id="ctrl-record-counter-<?= $terminCollection->key() ?>" class="badge text-bg-light rounded"></span></button>
+            <ul class="dropdown-menu">
+                <li><a id="ctrl-action-new" class="dropdown-item" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format("Y-m-d") ?>">Hinzufügen</a></li>
+                <?php if ($terminCollection->isTerminForThisDay()): ?>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a id="ctrl-action-update" class="dropdown-item" href="/manage/termin-write/update/<?= $terminCollection->getDatum()->format("Y-m-d") ?>" data-id="<?= $terminCollection->current['termin_id'] ?>">Bearbeiten</a></li>
+                    <li><a id="ctrl-action-copy" class="dropdown-item" href="/manage/termin-write/copy/<?= $terminCollection->getDatum()->format("Y-m-d") ?>" data-id="<?= $terminCollection->current['termin_id'] ?>">Kopieren</a></li>
+                    <li><a id="ctrl-action-delete" class="dropdown-item" href="/manage/termin-write/delete/<?= $terminCollection->getDatum()->format("Y-m-d") ?>" data-id="<?= $terminCollection->current['termin_id'] ?>">Löschen</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a id="ctrl-action-plus" class="dropdown-item" href="/manage/termin-write/plus/<?= $terminCollection->getDatum()->format("Y-m-d") ?>" data-id="<?= $terminCollection->current['termin_id'] ?>">Plus 7</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <?php if ($terminCollection->isTerminForThisDay()): ?>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-warning"><?= $this->escape($terminCollection->current['termin_id']) ?></button>
+                <button type="button" class="btn btn-sm btn-warning"><?= $this->escape(TerminAnsichtEnum::getLabelByValue($terminCollection->current['termin_ansicht'])) ?></button>
+                <button type="button" class="btn btn-sm btn-warning"><?= $this->escape(TerminStatusEnum::getLabelByValue($terminCollection->current['termin_status'])) ?></button>
+                <button type="button" class="btn btn-sm btn-warning"><?= $this->escape($terminCollection->current['termin_kategorie']) ?></button>
+            </div>
+            <?php if (
+                !$terminCollection->current['termin_aktiviere_drucken']
+                || !$terminCollection->current['termin_ist_konfliktrelevant']
+                || !$terminCollection->current['termin_zeige_konflikt']
+                || $terminCollection->current['termin_zeige_einmalig']
+                || $terminCollection->current['termin_zeige_tagezuvor']
+                || $terminCollection->current['termin_notiz']
+            ) : ?>
+                <div class="btn-group" role="group">
+                    <?php if ($terminCollection->current['termin_notiz']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Notiz: Ja</button>
+                    <?php endif; ?>
+                    <?php if ($terminCollection->current['termin_zeige_einmalig']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Einmalig: Ja</button>
+                    <?php endif; ?>
+                    <?php if ($terminCollection->current['termin_zeige_tagezuvor']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Tage zuvor: <?= $terminCollection->current['termin_zeige_tagezuvor'] ?></button>
+                    <?php endif; ?>
+                    <?php if (!$terminCollection->current['termin_aktiviere_drucken']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Druckrelevant: <?= ($terminCollection->current['termin_aktiviere_drucken']) ? 'Ja' : 'Nein' ?></button>
+                    <?php endif; ?>
+                    <?php if (!$terminCollection->current['termin_ist_konfliktrelevant']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Konfliktrelevant: <?= ($terminCollection->current['termin_ist_konfliktrelevant']) ? 'Ja' : 'Nein' ?></button>
+                    <?php endif; ?>
+                    <?php if (!$terminCollection->current['termin_zeige_konflikt']): ?>
+                        <button type="button" class="btn btn-sm btn-info">Konfliktanzeige: <?= ($terminCollection->current['termin_zeige_konflikt']) ? 'Ja' : 'Nein' ?></button>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($terminCollection->current['_konflikt'] && ($terminCollection->current['termin_zeige_konflikt']) || $terminCollection->current['_fehlbuchung'] && ($terminCollection->current['termin_zeige_konflikt'])) : ?>
+                <?php if ($terminCollection->current['_konflikt'] && ($terminCollection->current['termin_zeige_konflikt'])) : ?>
+                    <div class="btn-group" role="group">
+                        <?php foreach (explode('+++', $terminCollection->current['_konflikt']) as $k) : ?>
+                            <?php $v = explode('---', $k) ?>
+                            <?php if (strtotime($terminCollection->getDatum()->format('Y-m-d')) >= strtotime($v[4]) && strtotime($terminCollection->getDatum()->format('Y-m-d')) <= strtotime($v[5])) : ?>
+                                <button type="button" class="btn btn-sm btn-danger"><?= $this->escape($v[1]) ?><?php if ($v[2]) : ?> - <?= $this->escape($v[2]) ?><?php endif ?></button>
+                            <?php endif ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif ?>
+                <?php if ($terminCollection->current['_fehlbuchung'] && ($terminCollection->current['termin_zeige_konflikt'])) : ?>
+                    <div class="btn-group" role="group">
+                        <?php foreach (explode('+++', $terminCollection->current['_fehlbuchung']) as $k) : ?>
+                            <?php $v = explode('---', $k) ?>
+                            <?php if (strtotime($terminCollection->getDatum()->format('Y-m-d')) >= strtotime($v[4]) && strtotime($terminCollection->getDatum()->format('Y-m-d')) <= strtotime($v[5])) : ?>
+                                <button type="button" class="btn btn-sm btn-danger" title="<?= $this->escape($v[1]) ?><?php if ($v[2]) : ?> - <?= $this->escape($v[2]) ?><?php endif ?>">Fehlbuchung</button>
+                            <?php endif ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+</div>

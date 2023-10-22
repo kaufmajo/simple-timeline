@@ -1,0 +1,37 @@
+<?php
+
+use App\Service\AttributeService;
+
+// init
+$terminCollection = $terminCollection;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<div class="row <?= $elementAttributeService->getAttrValue('class') ?>" <?= $elementAttributeService->getAllWithout('class') ?> >
+    <div class="col-12">
+        <figure class="text-center mb-0 fw-light">
+            <blockquote class="blockquote mb-0">
+                <p>
+                    <a class="link-body-emphasis text-decoration-none" href="/show/<?= $terminCollection->current['termin_id'] ?>">
+                        <?= $this->escape($terminCollection->current['termin_betreff']) ?>
+                    </a>
+                </p>
+                <?php if ($terminCollection->current['termin_text']) : ?>
+                    <p><?= nl2br($this->escape($terminCollection->current['termin_text'])) ?></p>
+                <?php endif; ?>
+            </blockquote>
+            <?php if ($terminCollection->current['termin_mitvon']) : ?>
+                <figcaption class="blockquote-footer mt-1">
+                    <?= $this->escape($terminCollection->current['termin_mitvon']) ?> —
+                </figcaption>
+            <?php endif; ?>
+            <?php if ($terminCollection->current['termin_link']) : ?>
+                <a class="icon-link" href="<?= $this->escape($terminCollection->current['termin_link']) ?>">
+                    <?= $this->escape($this->escape($terminCollection->current['termin_link_titel'] ?? 'Link')) ?>
+                </a>
+            <?php endif ?>
+        </figure>
+    </div>
+</div>

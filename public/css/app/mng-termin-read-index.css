@@ -1,0 +1,20 @@
+/*
+ tags
+*/
+
+h1 {
+    margin-left: -2px;
+}
+
+p {
+    letter-spacing: 0.025em;
+}
+
+[data-type] {
+    cursor: pointer;
+}
+
+.highlight:hover > div:nth-child(2) {
+    color: var(--bs-body-color);
+    background-color: var(--bs-light-bg-subtle);
+}

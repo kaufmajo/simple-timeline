@@ -1,0 +1,152 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Enum\TerminStatusEnum;
+use App\Service\UrlpoolService;
+
+// init
+$mngTerminSearchForm = $mngTerminSearchForm;
+$searchValues = $searchValues;
+$terminCollection = $terminCollection;
+
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi Termine (Manage)']) ?>
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/mng-termin-read-index.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/mng-termin-read-index.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<!-- nav -->
+<nav class="navbar navbar-dark bg-primary mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/manage/home-read">Home</a>
+        <a class="navbar-brand fw-bold" href="/?cache=0" target="tab_termine">Ansicht</a>
+        <a class="navbar-brand fw-bold" href="/manage/media-read">Media</a>
+        <a class="navbar-brand fw-bold" href="/cleanup">Cleanup</a>
+        <a class="navbar-brand fw-bold" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+<!-- container -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold" style="margin-left: -2px;">Termine</h1>
+        </div>
+    </div>
+    <?php $mngTerminSearchForm->setAttributes([])->prepare() ?>
+    <?php $this->insert('partial::formerror', ['form' => $mngTerminSearchForm, 'showMessages' => true]); ?>
+    <form action="<?= $mngTerminSearchForm->getAttribute('action') ?>"
+          method="<?= $mngTerminSearchForm->getAttribute('method') ?>" name="<?= $mngTerminSearchForm->getName() ?>"
+          id="<?= $mngTerminSearchForm->getName() ?>">
+        <div class="row my-3 g-3">
+            <div class="col-md-6">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_suchtext'), 'attributes' => ['class' => 'form-label']]) ?>
+                <?php $this->insert('helper::input', ['element' => $mngTerminSearchForm->get('search_suchtext'), 'attributes' => ['class' => 'form-control']]) ?>
+            </div>
+            <div class="col-md-3">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_start'), 'attributes' => ['class' => 'form-label']]) ?>
+                <?php $this->insert('helper::input', ['element' => $mngTerminSearchForm->get('search_start'), 'attributes' => ['class' => 'form-control']]) ?>
+            </div>
+            <div class="col-md-3">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_ende'), 'attributes' => ['class' => 'form-label']]) ?>
+                <?php $this->insert('helper::input', ['element' => $mngTerminSearchForm->get('search_ende'), 'attributes' => ['class' => 'form-control']]) ?>
+            </div>
+        </div>
+        <div class="row my-3 g-3">
+            <div class="col-md-3">
+                <div class="form-check">
+                    <?php $this->insert('helper::checkbox', ['element' => $mngTerminSearchForm->get('search_anzeige'), 'attributes' => ['class' => 'form-check-input']]) ?>
+                    <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_anzeige'), 'attributes' => ['class' => 'form-check-label']]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_ansicht'), 'attributes' => ['class' => 'form-check-label']]) ?>
+                <?php $this->insert('helper::checkbox-multi', ['element' => $mngTerminSearchForm->get('search_ansicht'), 'attributes' => ['class-wrapper' => 'form-check', 'class-input' => 'form-check-input', 'class-label' => 'form-check-label']]) ?>
+            </div>
+            <div class="col-md-2">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_status'), 'attributes' => ['class' => 'form-check-label']]) ?>
+                <?php $this->insert('helper::checkbox-multi', ['element' => $mngTerminSearchForm->get('search_status'), 'attributes' => ['class-wrapper' => 'form-check', 'class-input' => 'form-check-input', 'class-label' => 'form-check-label']]) ?>
+            </div>
+            <div class="col-md-2">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_tage'), 'attributes' => ['class' => 'form-check-label']]) ?>
+                <?php $this->insert('helper::checkbox-multi', ['element' => $mngTerminSearchForm->get('search_tage'), 'attributes' => ['class-wrapper' => 'form-check', 'class-input' => 'form-check-input', 'class-label' => 'form-check-label']]) ?>
+            </div>
+            <div class="col-md-3">
+                <?php $this->insert('helper::label', ['element' => $mngTerminSearchForm->get('search_kategorie'), 'attributes' => ['class' => 'form-label']]) ?>
+                <?php $this->insert('helper::select', ['element' => $mngTerminSearchForm->get('search_kategorie'), 'attributes' => ['class' => 'form-control', 'size' => 7]]) ?>
+            </div>
+        </div>
+        <div class="row mt-3 g-3">
+            <div class="col-12">
+                <?php $this->insert('helper::submit', ['element' => $mngTerminSearchForm->get('submit-button'), 'attributes' => ['class' => 'btn-primary']]) ?>
+            </div>
+        </div>
+    </form>
+    <br>
+    <br>
+    <?php if ($terminCollection->count()) : ?>
+        <?php while ($terminCollection->current) : ?>
+            <?php if (!$terminCollection->hasInMemoryIfNotOverwrite('anchor-date', $terminCollection->current['datum_datum'])) : ?>
+                <a id="<?= UrlpoolService::getAnchorString($terminCollection->getFromMemory('anchor-date')) ?>"></a>
+            <?php endif ?>
+            <?php if ($terminCollection->isTerminForThisDay()) : ?>
+                <div class="my-0 highlight mb-5">
+                    <div class="row">
+                        <div class="col">
+                            <?php $this->insert('app-partial::event-header', [
+                                'terminCollection' => $terminCollection,
+                            ]); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <?php if (
+                                TerminAnsichtEnum::INFOBOX->value === $terminCollection->current['termin_ansicht'] &&
+                                TerminStatusEnum::MITTEILUNG->value !== $terminCollection->current['termin_status']
+                            ) : ?>
+                                <?php $this->insert('app-partial::info', [
+                                    'terminCollection' => $terminCollection,
+                                ]); ?>
+                            <?php elseif (TerminStatusEnum::MITTEILUNG->value === $terminCollection->current['termin_status']) : ?>
+                                <?php $this->insert('app-partial::event-quote', [
+                                    'terminCollection' => $terminCollection,
+                                ]); ?>
+                            <?php elseif (TerminStatusEnum::BILD->value === $terminCollection->current['termin_status']) : ?>
+                                <?php $this->insert('app-partial::picture', [
+                                    'terminCollection' => $terminCollection,
+                                ]); ?>
+                            <?php else: ?>
+                                <?php $this->insert('app-partial::event', [
+                                    'terminCollection' => $terminCollection,
+                                ]); ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php else : ?>
+                <div class="mt-0 mb-5 highlight">
+                    <div class="row">
+                        <div class="col">
+                            <?php $this->insert('app-partial::event-header', [
+                                'terminCollection' => $terminCollection,
+                            ]); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <?php $this->insert('app-partial::event', [
+                                'terminCollection' => $terminCollection,
+                            ]); ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php
+            $terminCollection->next();
+            ?>
+        <?php endwhile; ?>
+    <?php else : ?>
+        <p>Es wurden keine Termine gefunden.</p>
+    <?php endif; ?>
+</div>
