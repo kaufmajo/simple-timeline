@@ -25,15 +25,6 @@ $ ./script/sql/proc
 
 https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
 
-## Data-Folder
-
-LogFiles:
-
-```shell
-$ ./data/log/app.txt
-$ ./data/log/db.txt
-```
-
 ## Password
 
 ```php
@@ -52,6 +43,3 @@ $mypassword = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
 ```sql
 INSERT INTO `tajo1_user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`) VALUES (2, 'admin', 'user@mail.com', 'mypassword', 'admin');
 ```
-
-## bootstrap
-
