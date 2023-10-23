@@ -1,0 +1,14 @@
+.git/
+.idea/
+.var/
+aspnet_client/
+config/autoload/*local*
+config/*development*
+data/
+node_modules/
+script/sync/
+web.config
+phpcs.xml
+phpcs.xml.dist
+phpunit.xml.dist
+.phpcs-cache
