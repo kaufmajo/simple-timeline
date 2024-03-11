@@ -1,0 +1,28 @@
+<?php
+
+use App\Service\AttributeService;
+
+// attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes ?? []);
+?>
+<select class="<?= $elementAttributeService->getAttrValue('class') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>" <?= $elementAttributeService->getAllWithout(['class', 'type']) ?> >
+    <?php if (null !== $element->getEmptyOption()) : ?>
+        <option value=""><?= $element->getEmptyOption() ?></option>
+    <?php endif; ?>
+    <?php foreach ($element->getValueOptions() as $key => $val) : ?>
+        <?php
+        // key and value
+        $value = (isset($val['value'])) ? $val['value'] : $key;
+        $label = (isset($val['label'])) ? $val['label'] : $val;
+        // is selected
+        $selected = (null !== $element->getValue() && in_array($value, (is_array($element->getValue())) ? $element->getValue() : array($element->getValue()))) ? 'selected="selected"' : '';
+        // valueOption attributes
+        $valueOptionAttributes = implode(' ', array_map(function ($key, $value) {
+            return $key . '="' . $this->escape($value) . '"';
+        }, array_keys($val['attributes'] ?? []), $val['attributes'] ?? []));
+        ?>
+        <option value="<?= $this->escape($value) ?>" <?= ($valueOptionAttributes) ? ' ' . $valueOptionAttributes : '' ?><?= ($selected) ? ' ' . $selected : '' ?>><?= $this->escape($label) ?></option>
+    <?php endforeach; ?>
+</select>
+
+<?php $this->insert('helper::error', ['element' => $element, 'showErrorMessage' => $showErrorMessage ?? true]) ?>

@@ -1,0 +1,9 @@
+.idea
+.phpcs-cache
+clover.xml
+coveralls-upload.json
+phpunit.xml
+composer.lock
+
+nbproject/
+vendor/

@@ -1,0 +1,27 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Termin bestätigen']); ?>
+
+<?php $this->push('stylesheet') ?>
+<?php $this->end() ?>
+
+<?php $this->push('javascript') ?>
+<?php $this->end() ?>
+
+<div class="container mb-5">
+    <br>
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">Weiterfahren als ...</h1>
+        </div>
+    </div>
+    <div class="alert alert-secondary">
+        <button type="button" class="btn btn-danger"
+                onclick="window.location.href = '/manage/termin-write/<?= $action ?>/<?= $terminEntity->getTerminId() ?>/2/<?= $dateParam ?>'">
+            Serie
+        </button>
+        <div class="m-3 d-inline-block">oder</div>
+        <button type="button" class="btn btn-danger"
+                onclick="window.location.href = '/manage/termin-write/<?= $action ?>/<?= $terminEntity->getTerminId() ?>/1/<?= $dateParam ?>'">
+            Einzeltermin
+        </button>
+    </div>
+</div>

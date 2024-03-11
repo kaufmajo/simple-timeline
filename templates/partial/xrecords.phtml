@@ -1,0 +1,27 @@
+<?php
+// attributes
+use App\Service\AttributeService;
+
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+?>
+
+<?php if ($records) : ?>
+    <?php
+    if (is_array($records) || $records instanceof Countable) {
+        $count = count($records);
+    }
+    ?>
+    <div id="xrecords" data-count="<?= $count ?>" <?= $elementAttributeService->getAttrKeyValue('class') ?> >
+        <?php if (1 === $count): ?>
+            <i>Es wurde <span id="xrecords-count"><?= $count ?></span> Datensatz gefunden.</i>
+        <?php else: ?>
+            <i>Es wurden <span id="xrecords-count"><?= $count ?></span> Datensätze gefunden.</i>
+        <?php endif; ?>
+    </div>
+<?php else: ?>
+    <?php if (!isset($show_insert_searchtext_message) || $show_insert_searchtext_message) : ?>
+        <div id="xrecords" data-count="0" <?= $elementAttributeService->getAttrKeyValue('class') ?> >
+            Bitte geben Sie einen Suchbegriff ein.
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

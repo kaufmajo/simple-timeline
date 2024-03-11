@@ -1,0 +1,37 @@
+<?php
+
+use App\Service\AttributeService;
+
+// init
+$form = $form;
+$datalist = $datalist;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+?>
+<?php if ($form->getMessages()) : ?>
+    <?php $this->insert('partial::formerror', ['form' => $form, 'showMessages' => false]); ?>
+<?php endif; ?>
+<?php $form->setAttributes([])->prepare() ?>
+<form action="<?= $form->getAttribute('action') ?>" method="<?= $form->getAttribute('method') ?>" name="<?= $form->getName() ?>" id="<?= $form->getName() ?>">
+    <div class="input-group">
+        <?php $this->insert('helper::input', [
+            'element' => $form->get('search_suchtext'),
+            'attributes' => [
+                'placeholder' => '',
+                'class' => 'form-control text-sm-center border-end-0',
+                "autocomplete" => "off",
+            ],
+            'datalist' => [
+                'list' => $datalist,
+                'id' => 'search-datalist',
+            ],
+            'showErrorMessage' => false,
+        ]) ?>
+        <span class="input-group-text m-0 p-0">
+            <button id="input-search-submit" name="submit-button" type="submit" class="btn btn-light">
+                <i class="bi bi-search"></i>
+            </button>
+        </span>
+    </div>
+</form>

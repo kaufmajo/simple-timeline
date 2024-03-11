@@ -1,0 +1,112 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+use App\Service\HelperService;
+
+// init
+$terminCollection = $data;
+$terminIdParam = $terminIdParam;
+$termin = $terminCollection->current;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+// user
+$loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentity() : false;
+
+//
+$wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
+$linkColor = TerminAnsichtEnum::NONE->value === $termin['termin_ansicht'] ? 'link-danger' : 'link-secondary';
+$anchorTermin = $terminCollection->writeIntoMemory('anchor-termin', $termin['termin_id']);
+$highlightAttribute = $terminCollection->isDatumSunday() && $terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', 'sunday') : ($terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', 'normal') : '');
+?>
+<div <?= $highlightAttribute ?>>
+    <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]) ?>
+    <a href="/show/<?= $this->escape($termin['termin_id']) ?>?back=<?= $prevnextUrl ?>" class="<?= $linkColor ?> text-decoration-none" <?= HelperService::getAnchorAttribute($anchorTermin) ?>>
+        <?php if (TerminStatusEnum::MITTEILUNG->value === $termin['termin_status']) : ?>
+            <i class="bi bi-info-circle me-1"></i>
+        <?php endif ?>
+        <?= $this->escape($termin['termin_betreff']) ?>
+        <?php if (!$termin['termin_zeige_einmalig'] && $termin['_anzahl_tage'] > 1) : ?>
+            <span class="opacity-50">
+                (Tag <?= intval((new DateTime($termin['termin_datum_start']))->diff(new DateTime($termin['datum_datum']))->format('%R%a')) + 1 ?>/<?= $termin['_anzahl_tage'] ?>)
+            </span>
+        <?php endif; ?>
+        <?php if ($termin['termin_mitvon']) : ?>
+            (<?= $this->escape($termin['termin_mitvon']) ?>)
+        <?php endif; ?>
+        <?php if ($termin['termin_text']) : ?>
+            <?php if ($termin['termin_text']) : ?>
+                <div>
+                    <?= nl2br($this->escape(HelperService::string_substrWords($termin['termin_text'], 30))) ?>
+                </div>
+            <?php endif; ?>
+        <?php endif ?>
+    </a>
+    <?php if ($termin['termin_link'] || $termin['termin_link2']) : ?>
+        <?php if ($termin['termin_link']) : ?>
+            <a class="d-block text-decoration-none" href="<?= $this->escape($termin['termin_link']) ?>">
+                <?= $this->escape($termin['termin_link_titel'] ?? 'Link') ?>
+            </a>
+        <?php endif ?>
+        <?php if ($termin['termin_link2']) : ?>
+            <a class="d-block text-decoration-none" href="<?= $this->escape($termin['termin_link2']) ?>">
+                <?= $this->escape($termin['termin_link2_titel'] ?? 'Link') ?>
+            </a>
+        <?php endif ?>
+    <?php endif ?>
+    <?php if ((new DateTime($termin['datum_datum']))->format('Y-m-d') !== (new DateTime())->format('Y-m-d')) : ?>
+        <?php if ($termin['_def_neu']) : ?>
+            <!-- new indicator -->
+            <span class="badge bg-warning-subtle text-warning-emphasis fw-bold me-1 mt-1">Neu</span>
+        <?php elseif ($termin['_def_updated']) : ?>
+            <!-- update indicator -->
+            <span class="badge bg-warning-subtle text-warning-emphasis fw-bold me-1 mt-1">Aktualisiert</span>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]) ?>
+    <?php if ($loggedIn) : ?>
+        <div>
+            <?php if ($termin['_fehlbuchung'] && ($termin['termin_zeige_konflikt'])) : ?>
+                <div class="btn-group" role="group">
+                    <?php foreach (explode('+++', $termin['_fehlbuchung']) as $k) : ?>
+                        <?php $v = explode('---', $k) ?>
+                        <?php if (strtotime($termin['datum_datum']) >= strtotime($v[4]) && strtotime($termin['datum_datum']) <= strtotime($v[5])) : ?>
+                            <i class="bi bi-info-circle-fill text-danger" title="<?= $this->escape($v[1]) ?><?php if ($v[2]) : ?> - <?= $this->escape($v[2]) ?><?php endif ?>" data-bs-toggle="tooltip"></i>
+                        <?php endif ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif ?>
+            <?php if ($termin['termin_notiz']) : ?>
+                <i class="bi bi-card-text text-info" title="Notiz" data-bs-toggle="tooltip"></i>
+            <?php endif; ?>
+            <?php if ($termin['termin_zeige_einmalig']) : ?>
+                <i class="bi bi-1-circle-fill text-info" title="Einmalig" data-bs-toggle="tooltip"></i>
+            <?php endif; ?>
+            <?php if ($termin['termin_zeige_tagezuvor']) : ?>
+                <i class="bi bi-calendar-event-fill text-info" title="Tage zuvor" data-bs-toggle="tooltip"> <?= $termin['termin_zeige_tagezuvor'] ?></i>
+            <?php endif; ?>
+            <?php if ($termin['termin_aktiviere_drucken']) : ?>
+                <i class="bi bi-printer-fill text-info" title="Druckrelevant" data-bs-toggle="tooltip"></i>
+            <?php endif; ?>
+            <?php if ($termin['termin_ist_konfliktrelevant']) : ?>
+                <i class="bi bi-bug-fill text-info" title="Konfliktrelevant" data-bs-toggle="tooltip"></i>
+            <?php endif; ?>
+            <?php if ($termin['termin_zeige_konflikt']) : ?>
+                <i class="bi bi-pip-fill text-info" title="Konfliktanzeige" data-bs-toggle="tooltip"></i>
+            <?php endif; ?>
+            <div class="dropdown">
+                <button class="ps-0 btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/manage/termin-write/update/<?= $termin['termin_id'] ?>">Bearbeiten</a></li>
+                    <li><a class="dropdown-item" href="/manage/termin-write/copy/<?= $termin['termin_id'] ?>">Kopieren</a></li>
+                    <li><a class="dropdown-item" href="/manage/termin-write/delete/<?= $termin['termin_id'] ?>">Löschen</a></li>
+                </ul>
+            </div>
+        </div>
+    <?php endif ?>
+</div>

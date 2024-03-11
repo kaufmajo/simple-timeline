@@ -1,0 +1,14 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Media anlegen']); ?>
+
+<?php $this->push('stylesheet') ?>
+<?php $this->end() ?>
+
+<div class="container mb-5">
+    <br>
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">Media erstellen</h1>
+        </div>
+    </div>
+    <?php $this->insert('app::mng/media/form-media-partial', ['mediaForm' => $mediaForm, 'redirectUrl' => $redirectUrl, 'datalist' => $datalist]); ?>
+</div>

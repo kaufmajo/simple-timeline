@@ -1,0 +1,11 @@
+<?php
+$id = $datalist['id'] ?? null;
+$list = $datalist['list'] ?? null;
+?>
+<?php if ($id && $list) : ?>
+    <datalist id="<?= $this->escape($id) ?>">
+        <?php foreach ($list as $data): ?>
+            <option value="<?= $this->escape(array_values($data)[0]) ?>"></option>
+        <?php endforeach; ?>
+    </datalist>
+<?php endif; ?>

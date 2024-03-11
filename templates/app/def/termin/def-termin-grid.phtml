@@ -1,0 +1,15 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi - Termine']) ?>
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/def-termin-grid.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/def-termin-grid.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<?php $this->insert('app-partial::___grid___calender', [
+    'data' => $terminCollection,
+    'terminIdParam' => $terminIdParam,
+    'dateParam' => $dateParam,
+    'loggedIn' => isset($this->data['security']) ? $this->data['security']->getIdentity() : false,
+    'prevnextUrl' => '/',
+    'searchUrl' => '/search',
+]) ?>

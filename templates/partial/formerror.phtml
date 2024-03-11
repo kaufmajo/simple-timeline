@@ -1,0 +1,44 @@
+<?php
+
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
+
+if (!function_exists('printError'))
+{
+    function printError($errors, $view, $form)
+    {
+        foreach ($errors as $key => $value)
+        {
+            if (is_array($value) && ($form instanceof Form || $form instanceof Fieldset) && $form->has($key))
+            {
+                echo '<li>';
+                echo '<b>' . $form->get($key)->getLabel() . ': </b>';
+                printError($value, $view, $form->get($key));
+                echo '</li>';
+            }
+            elseif (is_array($value))
+            {
+                echo current($value);
+            }
+            else
+            {
+                echo $value;
+            }
+        }
+    }
+}
+?>
+<?php if ($form->getMessages()) : ?>
+    <div class="alert alert-danger">
+        <b>Bitte überprüfen Sie Ihre Eingaben.</b>
+        <?php
+        if ($showMessages && $form->getMessages())
+        {
+            echo '<ul style="list-style: none; padding-left: 0; margin-top: 20px; margin-bottom: 0;">';
+            printError($form->getMessages(), $this, $form);
+            echo '</ul>';
+        }
+        ?>
+    </div>
+<?php endif; ?>
+

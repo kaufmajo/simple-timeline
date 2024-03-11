@@ -1,0 +1,16 @@
+<?php
+
+use App\Service\AttributeService;
+
+// attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes ?? []);
+
+// is checked
+$checked = (null !== $element->getValue() && $element->getValue() === $element->getCheckedValue()) ? 'checked="checked"' : '';
+?>
+<input type="hidden" name="<?= $element->getName() ?>"
+       value="<?= $this->escape($element->getUncheckedValue()) ?>">
+<input class="<?= $elementAttributeService->getAttrValue('class') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>" <?= $elementAttributeService->getAllWithout('class') ?>
+       value="<?= $this->escape($element->getCheckedValue()) ?>" <?= $checked ?>>
+
+<?php $this->insert('helper::error', ['element' => $element, 'showErrorMessage' => $showErrorMessage ?? true]) ?>

@@ -1,0 +1,109 @@
+<?php
+
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+use App\Service\HelperService;
+use JK\DTF\DTF;
+
+// init
+$terminCollection = $data;
+$terminIdParam = $terminIdParam;
+$dateParam = $dateParam;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<!-- container -->
+<div class="container-fluid calender">
+    <div class="fs-1 d-flex align-items-center justify-content-between my-5 mx-3">
+        <a class="link-body-emphasis text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-left-fill"></i>
+        </a>
+        <span class="fw-bold">
+            <?php if ($terminCollection->isDatumForThisYear()) : ?>
+                <?= $this->escape(DTF::format($terminCollection->getDatum(), "LLLL")) ?>
+            <?php else : ?>
+                <?= $this->escape(DTF::format($terminCollection->getDatum(), "LLLL yy")) ?>
+            <?php endif ?>
+            <a class="link-body-emphasis" href="<?= $searchUrl ?>"><i class="bi bi-search ms-3"></i></a>
+        </span>
+        <a class="link-body-emphasis text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of next month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-right-fill"></i>
+        </a>
+    </div>
+    <ol class="p-0 my-3 bg-secondary-subtle">
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Mo</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Di</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Mi</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Do</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Fr</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">Sa</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle">So</li>
+        <?php $counter = (int)$terminCollection->getDatum()->format('N'); ?>
+        <?php while ($counter > 1) : ?>
+            <li class="d-none d-xxl-block bg-light-subtle">&nbsp;</li>
+            <?php $counter--; ?>
+        <?php endwhile ?>
+        <?php foreach ($terminCollection as $termin) : ?>
+            <?php
+            $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
+            ?>
+            <?php if ($terminCollection->isFirst() || $terminCollection->current['datum_datum'] !== $terminCollection->previous['datum_datum']) : ?>
+                <li class="position-relative p-2 <?= $terminCollection->isDatumSunday() ? 'bg-warning-subtle' : 'bg-light-subtle' ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
+                    <div class="d-flex justify-content-between w-100 fw-bold text-body-secondary">
+                        <div class="d-flex justify-content-between w-100">
+                            <div>
+                                <span class="me-1"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
+                                <span class="me-1 d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
+                                <?php if ($terminCollection->isDatumToday()) : ?>
+                                    <span class="badge text-bg-warning rounded-pill">Heute</span>
+                                <?php endif ?>
+                            </div>
+                            <div class="d-xxl-none fw-light">
+                                <?= $this->escape(DTF::format($terminCollection->getDatum(), 'eeee')) ?>
+                            </div>
+                        </div>
+                        <?php if ($loggedIn) : ?>
+                            <a class="link-warning" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format('Y-m-d') ?>" title="Anlegen" data-bs-toggle="tooltip"><i class="bi bi-plus-circle ms-2"></i></a>
+                        <?php endif ?>
+                    </div>
+                <?php endif ?>
+                <?php if ($terminCollection->hasTermin()) : ?>
+                    <div class="py-2 <?php if (!$termin['termin_zeit_ganztags'] || $termin['termin_image']) : ?>d-flex<?php endif ?>">
+                        <div class="me-2 text-secondary" style="min-width: 40px;">
+                            <?php if (!$termin['termin_zeit_ganztags']) : ?>
+                                <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) . '' ?>
+                            <?php endif; ?>
+                            <?php if ($termin['termin_image']) : ?>
+                                <img class="d-block mt-2 rounded-2" style="width: 40px; position: relative; top: -3px;" src="<?= $this->media($termin['termin_image']) ?>?w=40" alt="Thumbnail">
+                            <?php endif ?>
+                        </div>
+                        <div>
+                            <?php $this->insert('app-partial::___grid___event_body', [
+                                'data' => $terminCollection,
+                                'prevnextUrl' => $prevnextUrl,
+                                'terminIdParam' => $terminIdParam,
+                            ]) ?>
+                        </div>
+                    </div>
+                <?php endif ?>
+                <?php if ($terminCollection->isLast() || $terminCollection->current['datum_datum'] !== $terminCollection->next['datum_datum']) : ?>
+                </li>
+            <?php endif ?>
+        <?php endforeach ?>
+        <?php
+        $terminCollection->previous();
+        $counter = (int)$terminCollection->getDatum()->format('N');
+        ?>
+        <?php while ($counter < 7) : ?>
+            <li class="d-none d-xxl-block bg-light-subtle">&nbsp;</li>
+            <?php $counter++; ?>
+        <?php endwhile ?>
+    </ol>
+</div>
+<script>
+    // bs5 tooltip
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>

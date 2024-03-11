@@ -1,0 +1,46 @@
+<?php
+
+use App\Service\HelperService;
+
+// init
+$terminCollection = $terminCollection;
+
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi - Suchen']) ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/def-termin-search.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<div class="container">
+    <div class="position-absolute top-0 end-0 m-3">
+        <a class="link-body-emphasis text-decoration-none" href="<?= $redirectUrl ?>"><i class="bi bi-x-lg fs-1"></i></a>
+    </div>
+    <h1 class="text-center mt-5">Suchen</h1>
+    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+        <div class="my-5">
+            <?php $this->insert('app-partial::___search___form', [
+                'form' => $defTerminSearchForm,
+                'datalist' => $datalist,
+            ]) ?>
+        </div>
+        <?php if ($terminCollection->count()) : ?>
+            <?php while ($terminCollection->current) : ?>
+                <?php if ($terminCollection->hasTermin()) : ?>
+                    <?php $this->insert('app-partial::___search___row', [
+                        'data' => $terminCollection->current,
+                        'manage' => false,
+                    ]) ?>
+                    <?php if (!$terminCollection->isLast()) : ?>
+                        <hr class="my-3">
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php
+                $terminCollection->next();
+                ?>
+            <?php endwhile; ?>
+        <?php elseif (!empty($_GET)) : ?>
+            <div class="alert alert-warning text-center my-3 fw-bold" role="alert">
+                Es wurden keine Termine gefunden.
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

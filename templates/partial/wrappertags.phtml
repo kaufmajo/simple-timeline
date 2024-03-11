@@ -1,0 +1,11 @@
+<?php
+if ($tags)
+{
+    $close = 'close' === $type ? '/' : '';
+    $tags = '/' === $close ? array_reverse($tags) : $tags;
+
+    foreach ($tags as $tag)
+    {
+        echo '<' . $close . $tag . '>';
+    }
+}

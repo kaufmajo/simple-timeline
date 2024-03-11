@@ -1,0 +1,53 @@
+<?php
+
+use App\Model\Media\MediaEntity;
+use App\Provider\MediaStorageProvider;
+use App\Service\HelperService;
+use App\Service\UrlpoolService;
+
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Media Version']) ?>
+<!-- logout -->
+<nav class="navbar navbar-dark bg-info mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-dark" href="<?= $redirectUrl ?>">Media</a>
+        <a class="navbar-brand fw-bold text-dark" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+<!-- container -->
+<div class="container mb-5">
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold" style="margin-left: -2px;">Media-Version</h1>
+        </div>
+    </div>
+    <?php $this->insert('partial::xrecords', ['records' => $mediaArray, 'show_insert_searchtext_message' => true]); ?>
+    <br>
+    <?php foreach ($mediaArray as $media) : ?>
+        <?php
+        // styles
+        $mediaEntity = (new MediaEntity())->exchangeArray($media);
+        ?>
+        <div class="row mx-0 py-3" id="<?= HelperService::getAnchorString($media['media_id']) ?>">
+            <div class="col-12 col-xl-2">
+                <?= $this->escape((new DateTime($media['media_erstellt_am']))->format('d.m.Y H:i:s')) ?>
+            </div>
+            <div class="col-12 col-xl-2">
+                <span class="text-secondary" style="font-size: small;">
+                    Media-Id: <?= $this->escape($media['media_id']) ?>
+                <span>
+            </div>
+            <div class="col-12 col-xl-8 text-end">
+                <a title="Media anzeigen" href="/media/<?= $media['media_id'] ?>">
+                    <?= $this->escape($media['media_anzeige'] ?: $media['media_name']) ?>
+                </a>
+                <br>
+                <span class="text-secondary">
+                    <?= MediaStorageProvider::getExtension($mediaEntity) ?> -
+                    <?= HelperService::format_filesize($this->escape($media['media_groesse'])) ?>
+                </span>
+            </div>
+        </div>
+        <hr class="m-0">
+    <?php endforeach; ?>
+</div>

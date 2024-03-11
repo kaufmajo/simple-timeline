@@ -1,0 +1,38 @@
+<?php
+
+use App\Service\AttributeService;
+
+// attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes ?? []);
+
+?>
+<?php if ($element->getValueOptions()) : ?>
+
+    <?php
+    $valueOptions = $element->getValueOptions();
+    $options = $element->getOptions();
+
+    if (isset($options['empty_option'])) {
+        array_unshift($valueOptions, [
+            'label' => 'Alle',
+            'value' => $options['empty_option'],
+        ]);
+    }
+    ?>
+
+    <?php foreach ($valueOptions as $key => $val) : ?>
+        <?php $value = (isset($val['value'])) ? $val['value'] : $key; ?>
+        <?php $label = (isset($val['label'])) ? $val['label'] : $val; ?>
+        <?php $checked = ($element->getValue() === $value ? 'checked="checked"' : ''); ?>
+        <?php $id = (array_key_exists('id', $element->getAttributes())) ? $element->getAttributes()['id'] : ''; ?>
+        <div class="<?= $elementAttributeService->getAttrValue('class-wrapper') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>">
+            <input class="<?= $elementAttributeService->getAttrValue('class-input') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>"
+                   <?php if ($id) : ?>id="<?= $this->escape($id . '-' . $value) ?>" <?php endif; ?> type="radio"
+                   name="<?= $element->getName() ?>" value="<?= $this->escape($value) ?>" <?= $checked ?>>
+            <label class="<?= $elementAttributeService->getAttrValue('class-label') ?>"
+                   <?php if ($id) : ?>for="<?= $this->escape($id . '-' . $value) ?>" <?php endif; ?>><?= $this->escape($label) ?></label>
+        </div>
+    <?php endforeach; ?>
+<?php endif ?>
+
+<?php $this->insert('helper::error', ['element' => $element, 'showErrorMessage' => $showErrorMessage ?? true]) ?>
