@@ -29,7 +29,7 @@ ol>li {
     }
 }
 
-.highlight>div {
+.highlight {
     animation-name: highlightKeyframes;
     animation-iteration-count: 2;
     animation-duration: 3s;
