@@ -1,4 +1,4 @@
-AddHandler application/x-httpd-php82 .php
+AddHandler application/x-httpd-php83 .php
 
 RewriteEngine On
 # The following rule allows authentication to work with fast-cgi

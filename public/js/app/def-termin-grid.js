@@ -31,37 +31,15 @@ window.onload = function (event) {
 };
 
 // ---------------------------------------------------------------------------
-// run highlight normal days
+// run highlight
 
-const highlightNormalElements = document.querySelectorAll("[data-highlight='normal']");
+const highlightNormalElements = document.querySelectorAll("[data-highlight]");
 
 for (let i = 0, len = highlightNormalElements.length; i < len; i++) {
 
     const listItem = highlightNormalElements[i].closest("li");
-    const hightlightClass = 'dark' === sessionStorage.getItem('theme') ? "highlight-dark" : "highlight-light";
-    const normalClass = "bg-light-subtle";
 
-    listItem.classList.replace(normalClass, hightlightClass);
-    listItem.addEventListener("animationend", () => {
-        listItem.classList.replace(hightlightClass, normalClass);
-    });
-}
-
-// ---------------------------------------------------------------------------
-// run highlight sunday days
-
-const highlightSundayElements = document.querySelectorAll("[data-highlight='sunday']");
-
-for (let i = 0, len = highlightSundayElements.length; i < len; i++) {
-
-    const listItem = highlightSundayElements[i].closest("li");
-    const hightlightClass = 'dark' === sessionStorage.getItem('theme') ? "highlight-dark" : "highlight-light";
-    const normalClass = "bg-warning-subtle";
-
-    listItem.classList.replace(normalClass, hightlightClass);
-    listItem.addEventListener("animationend", () => {
-        listItem.classList.replace(hightlightClass, normalClass);
-    });
+    listItem.classList.add("highlight");
 }
 
 // ---------------------------------------------------------------------------

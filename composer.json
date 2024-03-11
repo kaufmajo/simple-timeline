@@ -43,7 +43,7 @@
     "forum": "https://discourse.zendframework.com/c/questions/expressive"
   },
   "require": {
-    "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+    "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
     "ext-exif": "*",
     "ext-fileinfo": "*",
     "ext-gd": "*",

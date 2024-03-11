@@ -50,14 +50,14 @@ $elementAttributeService = new AttributeService([], $attributes ?? []);
             $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
             ?>
             <?php if ($terminCollection->isFirst() || $terminCollection->current['datum_datum'] !== $terminCollection->previous['datum_datum']) : ?>
-                <li class="position-relative p-2 <?= $terminCollection->isDatumSunday() ? 'bg-warning-subtle' : 'bg-light-subtle' ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
+                <li class="position-relative p-2 <?= $terminCollection->isDatumSunday() ? 'bg-body-tertiary' : 'bg-light-subtle' ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
                     <div class="d-flex justify-content-between w-100 fw-bold text-body-secondary">
                         <div class="d-flex justify-content-between w-100">
                             <div>
                                 <span class="me-1"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
                                 <span class="me-1 d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
                                 <?php if ($terminCollection->isDatumToday()) : ?>
-                                    <span class="badge text-bg-warning rounded-pill">Heute</span>
+                                    <span class="badge text-bg-primary rounded-pill">Heute</span>
                                 <?php endif ?>
                             </div>
                             <div class="d-xxl-none fw-light">
@@ -65,7 +65,7 @@ $elementAttributeService = new AttributeService([], $attributes ?? []);
                             </div>
                         </div>
                         <?php if ($loggedIn) : ?>
-                            <a class="link-warning" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format('Y-m-d') ?>" title="Anlegen" data-bs-toggle="tooltip"><i class="bi bi-plus-circle ms-2"></i></a>
+                            <a class="link-primary" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format('Y-m-d') ?>" title="Anlegen" data-bs-toggle="tooltip"><i class="bi bi-plus-circle ms-2"></i></a>
                         <?php endif ?>
                     </div>
                 <?php endif ?>

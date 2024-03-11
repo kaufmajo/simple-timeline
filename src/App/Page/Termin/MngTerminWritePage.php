@@ -80,7 +80,7 @@ class MngTerminWritePage extends AbstractBasePage
         // save
         $terminEntity = $this->save($terminEntity, $terminForm);
 
-        $this->flashMessages($request)->flash('warning', 'default');
+        $this->flashMessages($request)->flash('primary', 'default');
 
         return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()));
     }
@@ -127,7 +127,7 @@ class MngTerminWritePage extends AbstractBasePage
         // save
         $terminEntity = $this->save($terminEntity, $terminForm);
 
-        $this->flashMessages($request)->flash('warning', 'default');
+        $this->flashMessages($request)->flash('primary', 'default');
 
         return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')));
     }
@@ -178,7 +178,7 @@ class MngTerminWritePage extends AbstractBasePage
         // save
         $terminEntity = $this->save($terminEntity, $terminForm);
 
-        $this->flashMessages($request)->flash('warning', 'default');
+        $this->flashMessages($request)->flash('primary', 'default');
 
         return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')));
     }
@@ -212,7 +212,7 @@ class MngTerminWritePage extends AbstractBasePage
         // ok ... now execute delete
         $terminCommand->deleteTermin($terminEntity);
 
-        $this->flashMessages($request)->flash('warning', 'default');
+        $this->flashMessages($request)->flash('primary', 'default');
 
         return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()));
     }

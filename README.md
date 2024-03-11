@@ -2,7 +2,7 @@
 
 ## PHP
 
-Version: 8.2
+Version: 8.3
 
 ## Database
 
@@ -58,13 +58,13 @@ $ apt-get install php libapache2-mod-php
 ### Install PHP Modules for Apache
 
 ```shell
-$ apt-get install php8.2-mysql
-$ apt-get install php8.2-gd
-$ apt-get install php8.2-intl
-$ apt-get install php8.2-tidy
-$ apt-get install php8.2-xml
-$ apt-get install php8.2-xdebug # only required on dev server
-$ apt-get install php8.2-zip
+$ apt-get install php8.3-mysql
+$ apt-get install php8.3-gd
+$ apt-get install php8.3-intl
+$ apt-get install php8.3-tidy
+$ apt-get install php8.3-xml
+$ apt-get install php8.3-xdebug # only required on dev server
+
 ```
 
 ### Dev WSL Configuration
@@ -175,8 +175,8 @@ sudo update-alternatives --config php
 Change default php version on Apache:
 
 ```shell
-sudo a2dismod php8.1 
-sudo a2enmod php8.2 
+sudo a2dismod php8.2 
+sudo a2enmod php8.3 
 sudo service apache2 restart 
 ```
 
@@ -335,3 +335,7 @@ Then commit your changes:
 ```shell
 $ git commit -m "Untrack files in .gitignore"
 ```
+
+## Managing remote repositories
+
+https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories

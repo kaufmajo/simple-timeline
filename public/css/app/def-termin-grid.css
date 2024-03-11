@@ -29,52 +29,27 @@ ol>li {
     }
 }
 
-.highlight-light {
-    animation-name: highlight-light;
+.highlight>div {
+    animation-name: highlightKeyframes;
     animation-iteration-count: 2;
-    animation-duration: 2s;
+    animation-duration: 3s;
     animation-delay: 0s;
 }
 
-.highlight-dark {
-    animation-name: highlight-dark;
-    animation-iteration-count: 2;
-    animation-duration: 2s;
-    animation-delay: 0s;
-}
-
-@keyframes highlight-light {
+@keyframes highlightKeyframes {
     0% {
-        background-color: #fcfcfd;
+        opacity: initial;
     }
 
     50% {
-        background-color: #ffc107;
+        opacity: 0;
     }
 
     51% {
-        background-color: #ffc107;
+        opacity: 0;
     }
 
     100% {
-        background-color: #fcfcfd;
-    }
-}
-
-@keyframes highlight-dark {
-    0% {
-        background-color: #343a40;
-    }
-
-    50% {
-        background-color: #ffc107;
-    }
-
-    51% {
-        background-color: #ffc107;
-    }
-
-    100% {
-        background-color: #343a40;
+        opacity: initial;
     }
 }
