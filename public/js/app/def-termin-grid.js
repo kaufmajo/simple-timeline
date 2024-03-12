@@ -33,13 +33,14 @@ window.onload = function (event) {
 // ---------------------------------------------------------------------------
 // run highlight
 
-const highlightNormalElements = document.querySelectorAll("[data-highlight]");
+const highlightElements = document.querySelectorAll("[data-highlight='1']");
 
-for (let i = 0, len = highlightNormalElements.length; i < len; i++) {
+for (let i = 0, len = highlightElements.length; i < len; i++) {
 
-    const listItem = highlightNormalElements[i].closest("li");
+    const listItem = highlightElements[i].closest("li");
 
-    listItem.classList.add("highlight");
+    listItem.classList.remove("highlight");
+    setTimeout(function () { listItem.classList.add("highlight") }, 100);
 }
 
 // ---------------------------------------------------------------------------

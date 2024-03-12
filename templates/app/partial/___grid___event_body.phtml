@@ -20,7 +20,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
 $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
 $linkColor = TerminAnsichtEnum::NONE->value === $termin['termin_ansicht'] ? 'link-danger' : 'link-secondary';
 $anchorTermin = $terminCollection->writeIntoMemory('anchor-termin', $termin['termin_id']);
-$highlightAttribute = $terminCollection->isDatumSunday() && $terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', 'sunday') : ($terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', 'normal') : '');
+$highlightAttribute = $terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', '1') : '';
 ?>
 <div <?= $highlightAttribute ?>>
     <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]) ?>

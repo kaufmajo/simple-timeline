@@ -54,7 +54,7 @@ $elementAttributeService = new AttributeService([], $attributes ?? []);
                     <div class="d-flex justify-content-between w-100 fw-bold text-body-secondary">
                         <div class="d-flex justify-content-between w-100">
                             <div>
-                                <span class="px-0 <?= $terminCollection->isDatumToday() ? 'text-primary-emphasis bg-primary-subtle' : 'text-body-emphasis' ?>">
+                                <span class="<?= $terminCollection->isDatumToday() ? 'px-2 py-0 text-bg-primary rounded-pill' : 'text-body-secondary' ?>">
                                     <span><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
                                     <span class="ms-1 d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
                                 </span>

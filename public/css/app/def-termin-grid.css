@@ -30,26 +30,6 @@ ol>li {
 }
 
 .highlight {
-    animation-name: highlightKeyframes;
-    animation-iteration-count: 2;
-    animation-duration: 3s;
-    animation-delay: 0s;
-}
-
-@keyframes highlightKeyframes {
-    0% {
-        opacity: initial;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    51% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: initial;
-    }
+    transform: rotateX(360deg);
+    transition: 2s linear;
 }
