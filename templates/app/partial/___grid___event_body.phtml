@@ -28,14 +28,18 @@ $highlightAttribute = $terminIdParam === $termin['termin_id'] ? HelperService::g
         <?php if (TerminStatusEnum::MITTEILUNG->value === $termin['termin_status']) : ?>
             <i class="bi bi-info-circle me-1"></i>
         <?php endif ?>
-        <?= $this->escape($termin['termin_betreff']) ?>
+        <span>
+            <?= $this->escape($termin['termin_betreff']) ?>
+        </span>
         <?php if (!$termin['termin_zeige_einmalig'] && $termin['_anzahl_tage'] > 1) : ?>
             <span class="opacity-50">
                 (Tag <?= intval((new DateTime($termin['termin_datum_start']))->diff(new DateTime($termin['datum_datum']))->format('%R%a')) + 1 ?>/<?= $termin['_anzahl_tage'] ?>)
             </span>
         <?php endif; ?>
         <?php if ($termin['termin_mitvon']) : ?>
-            (<?= $this->escape($termin['termin_mitvon']) ?>)
+            <span>
+                (<?= $this->escape($termin['termin_mitvon']) ?>)
+            </span>
         <?php endif; ?>
         <?php if ($termin['termin_text']) : ?>
             <?php if ($termin['termin_text']) : ?>
@@ -60,10 +64,10 @@ $highlightAttribute = $terminIdParam === $termin['termin_id'] ? HelperService::g
     <?php if ((new DateTime($termin['datum_datum']))->format('Y-m-d') !== (new DateTime())->format('Y-m-d')) : ?>
         <?php if ($termin['_def_neu']) : ?>
             <!-- new indicator -->
-            <span class="badge bg-primary-subtle text-primary-emphasis fw-bold me-1 mt-1">Neu</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 d-table">Neu</span>
         <?php elseif ($termin['_def_updated']) : ?>
             <!-- update indicator -->
-            <span class="badge bg-primary-subtle text-primary-emphasis fw-bold me-1 mt-1">Aktualisiert</span>
+            <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 d-table">Aktualisiert</span>
         <?php endif; ?>
     <?php endif; ?>
     <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]) ?>
