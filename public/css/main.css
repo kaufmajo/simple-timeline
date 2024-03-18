@@ -46,14 +46,12 @@ a {
 }
 
 /*
-scrollup button
+corner button
 */
 
 .corner_button {
     display: none;
     position: fixed;
-    bottom: 20px;
-    right: 30px;
     z-index: 99;
     border: var(--bs-dark-border-subtle) 1px solid;
     outline: none;
@@ -68,4 +66,9 @@ scrollup button
     background-color: var(--bs-dark-bg-subtle);
     color: var(--bs-dark-text-emphasis);
     opacity: 1;
+}
+
+.top_corner_button {
+    bottom: 20px;
+    right: 30px;
 }

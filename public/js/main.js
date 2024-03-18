@@ -1,17 +1,22 @@
 // ---------------------------------------------------------------------------
-// scrollup button
+// top corner button (scrollup)
 
-top_corner_button = document.getElementById("top_corner_button");
+function showCornerButton(button) {
 
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function () {
-    //
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        top_corner_button.style.display = "block";
-    } else {
-        top_corner_button.style.display = "none";
-    }
+    const corner_button = document.getElementById(button);
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.addEventListener('scroll', () => {
+        //
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            corner_button.style.display = "block";
+        } else {
+            corner_button.style.display = "none";
+        }
+    });
 };
+
+showCornerButton("top_corner_button");
 
 // ---------------------------------------------------------------------------
 // When the user clicks on the button, scroll to the top of the document

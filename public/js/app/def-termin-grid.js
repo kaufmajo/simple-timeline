@@ -28,7 +28,7 @@ window.onload = function (event) {
             + ('0' + (new Date()).getDate()).slice(-2);
         window.location.hash = "#anchor-" + today;
     }
-};
+}
 
 // ---------------------------------------------------------------------------
 // run highlight

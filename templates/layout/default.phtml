@@ -28,21 +28,21 @@
         }
         document.documentElement.setAttribute('data-bs-theme', sessionStorage.getItem('theme'));
     </script>
+    <script defer src="/js/main.js?u=<?= REFRESH_STATIC_FILES ?>"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 
 <body data-page-datetime="<?= date("Y-m-d-H-i-s") ?>">
     <?= $this->section('content') ?>
-    <!-- scrollup button -->
-    <button class="corner_button" onclick="topFunction()" id="top_corner_button" title="Go to top">
+    <!-- top corner button -->
+    <button class="corner_button top_corner_button" onclick="topFunction()" id="top_corner_button" title="Go to top">
         <i class="bi bi-caret-up-fill"></i>
     </button>
     <!-- flash messages -->
     <?php if (isset($notifications)) : ?>
         <?php $this->insert('partial::flash') ?>
     <?php endif; ?>
-    <script src="/js/main.js?u=<?= REFRESH_STATIC_FILES ?>"></script>
     <?= $this->section('javascript') ?>
 </body>
 
