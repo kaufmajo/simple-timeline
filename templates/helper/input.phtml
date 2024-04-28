@@ -1,0 +1,16 @@
+<?php
+
+use App\Service\AttributeService;
+
+// elment attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes ?? []);
+
+?>
+
+<?php if (isset($datalist['id']) && isset($datalist['list'])): ?>
+    <?php $elementAttributeService->add('list', $datalist['id']); ?>
+    <?php $this->insert('helper::datalist', ['datalist' => $datalist]); ?>
+<?php endif; ?>
+    <input class="<?= $elementAttributeService->getAttrValue('class') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>" <?= $elementAttributeService->getAllWithout('class') ?> value="<?= $this->escape($element->getValue()) ?>">
+
+<?php $this->insert('helper::error', ['element' => $element, 'showErrorMessage' => $showErrorMessage ?? true]) ?>

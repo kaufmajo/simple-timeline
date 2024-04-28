@@ -1,0 +1,123 @@
+<?php
+
+use App\Model\Media\MediaEntity;
+use App\Provider\MediaStorageProvider;
+use App\Service\HelperService;
+use App\Service\UrlpoolService;
+
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Media']) ?>
+
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/mng-media-read-index.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+
+<!-- logout -->
+<nav class="navbar navbar-dark bg-info mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-dark" href="/manage/home-read">Home</a>
+        <a class="navbar-brand fw-bold text-dark" href="/manage/media-write/insert">Media erstellen</a>
+        <a class="navbar-brand fw-bold text-dark" href="/manage/termin-calendar">Termine</a>
+        <a class="navbar-brand fw-bold text-dark" href="/cleanup">Cleanup</a>
+        <a class="navbar-brand fw-bold text-dark" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+<!-- container -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold" style="margin-left: -2px;">Media</h1>
+        </div>
+    </div>
+    <?php $mngMediaSearchForm->setAttributes([])->prepare() ?>
+    <?php $this->insert('partial::formerror', ['form' => $mngMediaSearchForm, 'showMessages' => false]); ?>
+    <form action="<?= $mngMediaSearchForm->getAttribute('action') ?>" method="<?= $mngMediaSearchForm->getAttribute('method') ?>" name="<?= $mngMediaSearchForm->getName() ?>" id="<?= $mngMediaSearchForm->getName() ?>">
+        <div class="row my-3 g-3">
+            <div class="col-12 col-md-10">
+                <?php $this->insert('helper::label', ['element' => $mngMediaSearchForm->get('search_suchtext'), 'attributes' => ['class' => 'form-label visually-hidden']]) ?>
+                <?php $this->insert('helper::input', [
+                    'element' => $mngMediaSearchForm->get('search_suchtext'),
+                    'attributes' => ['class' => 'form-control', 'placeholder' => "", "autocomplete" => "off"],
+                    'datalist' => ['list' => $datalist, 'id' => 'search-datalist'],
+                ]) ?>
+            </div>
+            <div class="col-12 col-md-2">
+                <?php $this->insert('helper::submit', ['element' => $mngMediaSearchForm->get('submit-button'), 'attributes' => ['class' => 'btn-info']]) ?>
+            </div>
+        </div>
+    </form>
+    <ul class="mt-5 mb-3 list-unstyled d-flex">
+        <li class="me-3">
+            <span class="d-inline-block bg-danger-subtle me-1" style="width: 25px;">&nbsp;</span>
+            Offline
+        </li>
+    </ul>
+    <?php $this->insert('partial::xrecords', ['records' => $mediaArray, 'show_insert_searchtext_message' => true]); ?>
+    <br>
+    <?php foreach ($mediaArray as $media) : ?>
+        <?php
+        // styles
+        $wrapperClass = ($media['_gueltig']) ? '' : 'bg-danger-subtle';
+        $anchorClass = ($media['_gueltig']) ? '' : 'link-light';
+        $mediaEntity = (new MediaEntity())->exchangeArray($media);
+        ?>
+        <div class="row <?= $wrapperClass ?> mx-0 py-3" id="<?= HelperService::getAnchorString($media['media_id']) ?>">
+            <div class="col-12 col-lg-1">
+                <a class="<?= $anchorClass ?>" title="Media anzeigen" href="/media/<?= $media['media_id'] ?>">
+                    <?php if (MediaStorageProvider::isAnImage($mediaEntity) && MediaStorageProvider::isInStorage($mediaEntity)) : ?>
+                        <img src="/media/<?= $media['media_id'] ?>?w=75" alt="<?= $media['media_name'] ?>" class="img-fluid m-1">
+                    <?php else : ?>
+                        <?= match (strtolower(MediaStorageProvider::getExtension($mediaEntity))) {
+                            'jpg', 'jpeg', 'png', 'gif' => '<i class="bi bi-file-image-fill" style="font-size: 2rem;"></i>',
+                            'doc', 'docx', 'odt' => '<i class="bi bi-file-word-fill" style="font-size: 2rem;"></i>',
+                            'pdf' => '<i class="bi bi-file-pdf-fill" style="font-size: 2rem;"></i>',
+                            'ppt', 'pptx' => '<i class="bi bi-file-ppt-fill" style="font-size: 2rem;"></i>',
+                            'xls', 'xlsx' => '<i class="bi bi-file-spreadsheet-fill" style="font-size: 2rem;"></i>',
+                            'zip' => '<i class="bi bi-file-zip-fill" style="font-size: 2rem;"></i>',
+                            default => '<i class="bi bi-file-fill" style="font-size: 2rem;"></i>',
+                        }; ?>
+                    <?php endif; ?>
+                </a>
+            </div>
+            <div class="col-12 col-lg-4">
+                <a class="<?= $anchorClass ?>" title="Media anzeigen" href="/media/<?= $media['media_id'] ?>">
+                    <?= $this->escape($media['media_anzeige'] ?: $media['media_name']) ?>
+                </a>
+                <br>
+                <span class="text-secondary">
+                    <?= $this->escape(MediaStorageProvider::getExtension($mediaEntity)) ?> /
+                    <?= $this->escape(HelperService::format_filesize($this->escape($media['media_groesse']))) ?>
+                </span>
+            </div>
+            <div class="col-12 col-lg-2">
+                <?= $this->escape($media['media_tag']) ?>
+            </div>
+            <div class="col-12 col-lg-2">
+                <?= $this->escape(HelperService::format_displayDate($media['media_von'], $media['media_bis'])) ?>
+                <!--
+                <br>
+                <span class="text-secondary">
+                    <?= (new DateTime($media['media_aktualisiert_am']))->format('d.m.Y H:i:s') ?>
+                <span>
+                -->
+            </div>
+            <div class="col-12 col-lg-1">
+                <?= $media['media_privat'] ? '<i class="bi bi-lock-fill" title="Media-Element ist privat"></i>' : "" ?>
+                <?= $media['termin_id'] ? '<i class="bi bi-link-45deg" title="Media-Element ist mit einem Termin verlinkt."></i>' : "" ?>
+                <?= $media['_hatVersion'] ? '<a title="Media-Element Versionen anzeigen." href="/manage/media-read/version/' . $media["media_id"] . '"><i class="bi bi-clock-history"></i></a>' : "" ?>
+            </div>
+            <div class="col-12 col-lg-2 text-start text-end">
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Aktion
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/manage/media-write/update/<?= $media['media_id'] ?>">Bearbeiten</a></li>
+                        <li><a class="dropdown-item" href="/manage/media-write/delete/<?= $media['media_id'] ?>">Löschen</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr class="m-0">
+    <?php endforeach; ?>
+</div>

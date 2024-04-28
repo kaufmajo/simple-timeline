@@ -1,0 +1,24 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Termine ']) ?>
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/def-termin-calendar.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/def-termin-calendar.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<!-- nav -->
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/manage/home-read">Home</a>
+        <a class="navbar-brand fw-bold" href="/">Ansicht</a>
+        <a class="navbar-brand fw-bold" href="/manage/media-read">Media</a>
+        <a class="navbar-brand fw-bold" href="/cleanup">Cleanup</a>
+        <a class="navbar-brand fw-bold" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+<?php $this->insert('app-partial::___calendar', [
+    'data' => $terminCollection,
+    'terminIdParam' => $terminIdParam,
+    'dateParam' => $dateParam,
+    'prevnextUrl' => '/manage/termin-calendar',
+    'searchUrl' => '/manage/termin-search',
+]) ?>

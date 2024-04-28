@@ -1,0 +1,64 @@
+<?php
+
+use App\Enum\TerminStatusEnum;
+use Eluceo\iCal\Domain\Entity\Calendar;
+use Eluceo\iCal\Domain\Entity\Event;
+use Eluceo\iCal\Domain\Enum\EventStatus;
+use Eluceo\iCal\Domain\ValueObject\Date;
+use Eluceo\iCal\Domain\ValueObject\MultiDay;
+use Eluceo\iCal\Domain\ValueObject\SingleDay;
+use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
+use Eluceo\iCal\Domain\ValueObject\Uri;
+use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+
+// init
+$terminCollection = $terminCollection;
+
+if ($terminCollection->count()) :
+
+    $events = [];
+
+    while ($terminCollection->current) :
+
+        // uniqueId
+        $uniqueIdentifier = new UniqueIdentifier("termine.egli.church/show/{$terminCollection->current['termin_id']}");
+
+        // occurrence
+        if ($terminCollection->current['_anzahl_tage'] === 1) {
+
+            $date = new Date(DateTimeImmutable::createFromFormat('Y-m-d', $terminCollection->current['termin_datum_start']));
+            $occurrence = new SingleDay($date);
+            //
+        } else {
+
+            $firstDay = new Date(DateTimeImmutable::createFromFormat('Y-m-d', $terminCollection->current['termin_datum_start']));
+            $lastDay = new Date(DateTimeImmutable::createFromFormat('Y-m-d', $terminCollection->current['termin_datum_ende']));
+            $occurrence = new MultiDay($firstDay, $lastDay);
+        }
+
+        // summary
+        $summary = TerminStatusEnum::GESTRICHEN->value === $terminCollection->current['termin_status'] ? 'ABGESAGT - ' : '';
+        $summary .= $terminCollection->current['termin_betreff'];
+        $summary .= $terminCollection->current['termin_mitvon'] ? ' (' . $terminCollection->current['termin_mitvon'] . ')' : '';
+
+        // Create Event domain entity
+        $events[] = (new Event($uniqueIdentifier))
+            ->setSummary($summary)
+            ->setOccurrence($occurrence)
+            ->setStatus(TerminStatusEnum::GESTRICHEN->value === $terminCollection->current['termin_status'] ? EventStatus::CANCELLED() : EventStatus::CONFIRMED())
+            ->setUrl(new Uri("https://termine.egli.church/show/{$terminCollection->current['termin_id']}"));
+
+        $terminCollection->next();
+
+    endwhile;
+
+    // Create Calendar domain entity
+    $calendar = new Calendar($events);
+
+    // Transform domain entity into an iCalendar component
+    $componentFactory = new CalendarFactory();
+    $calendarComponent = $componentFactory->createCalendar($calendar);
+
+    echo $calendarComponent;
+
+endif;

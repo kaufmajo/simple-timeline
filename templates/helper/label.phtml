@@ -1,0 +1,14 @@
+<?php
+
+use App\Service\AttributeService;
+
+// show label
+$showLabel = $label ?? true;
+
+// attributes
+$labelAttributeService = new AttributeService($element->getLabelAttributes(), $attributes ?? []);
+$id = !array_key_exists('multiple', $element->getAttributes()) ? $element->getAttribute('id') : '';
+?>
+<?php if ($showLabel && 'hidden' !== $element->getAttributes()['type']) : ?>
+    <label class="<?= $labelAttributeService->getAttrValue('class') ?>" <?php if ($id): ?>for="<?= $id ?>"<?php endif; ?> ><?= $this->escape($element->getLabel()) ?></label>
+<?php endif ?>

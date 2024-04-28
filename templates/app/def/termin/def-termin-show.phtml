@@ -1,0 +1,73 @@
+<?php
+
+use App\Enum\TerminStatusEnum;
+use App\Service\HelperService;
+
+// init
+$terminEntity = $terminEntity;
+
+?>
+<?php $this->layout('layout::default', ['title' => 'EGLi - ' . $this->escape(HelperService::string_substrWords($terminEntity->getTerminBetreff(), 10))]) ?>
+<?php $this->push('stylesheet') ?>
+<?php $this->end() ?>
+<?php if ($terminEntity) : ?>
+    <?php
+    $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $terminEntity->getTerminStatus() ? ['del'] : [];
+    ?>
+    <?php if ($terminEntity->getTerminImage()) : ?>
+        <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center bg-dark" style="background-image: url('<?= $this->escape($this->media($terminEntity->getTerminImage())) ?>'); background-repeat: no-repeat; background-size: contain; background-position: center;"></div>
+        <script>
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight)
+            }, 3000);
+        </script>
+    <?php endif; ?>
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <div class="m-1 text-center" style="max-width: 1200px;">
+            <h3 class="fw-light">
+                <?= $this->escape(HelperService::format_displayDate($terminEntity->getTerminDatumstart(), $terminEntity->getTerminDatumEnde())) ?>
+                <?php if (!$terminEntity->getTerminZeitGanztags() && $terminEntity->getTerminZeitstart()) : ?>
+                    - <?= $this->escape(HelperService::format_displayTime($terminEntity->getTerminZeitstart())) ?>
+                <?php endif; ?>
+            </h3>
+            <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]); ?>
+            <h1 class="mt-4 fw-light">
+                <?php if (TerminStatusEnum::MITTEILUNG->value === $terminEntity->getTerminStatus()) : ?>
+                    <i class="bi bi-info-circle-fill me-2 text-warning"></i>
+                <?php endif ?>
+                <a class="text-secondary-emphasis text-decoration-none" href="<?= $this->escape($back) ?>?id=<?= $this->escape($terminEntity->getTerminId()) ?>&date=<?= $this->escape($terminEntity->getTerminDatumstart()) ?>#<?= $this->escape(HelperService::getAnchorString($terminEntity->getTerminDatumstart())) ?>">
+                    <?= $this->escape($terminEntity->getTerminBetreff()) ?>
+                </a>
+            </h1>
+            <?php if ($terminEntity->getTerminMitvon()) : ?>
+                <p class="mt-4">
+                    <?= $this->escape($terminEntity->getTerminMitvon()) ?>
+                </p>
+            <?php endif; ?>
+            <?php if ($terminEntity->getTerminText()) : ?>
+                <p class="mt-4 opacity-50">
+                    <?= nl2br($this->escape($terminEntity->getTerminText())) ?>
+                </p>
+            <?php endif ?>
+            <?php if ($terminEntity->getTerminLink() || $terminEntity->getTerminLink2()) : ?>
+                <div class="mt-4">
+                    <?php if ($terminEntity->getTerminLink()) : ?>
+                        <a class="icon-link d-block text-decoration-none" href="<?= $this->escape($terminEntity->getTerminLink()) ?>">
+                            <?= $this->escape($terminEntity->getTerminLinkTitel() ?? 'Link') ?>
+                        </a>
+                    <?php endif ?>
+                    <?php if ($terminEntity->getTerminLink2()) : ?>
+                        <a class="icon-link d-block text-decoration-none" href="<?= $this->escape($terminEntity->getTerminLink2()) ?>">
+                            <?= $this->escape($terminEntity->getTerminLink2Titel() ?? 'Link') ?>
+                        </a>
+                    <?php endif ?>
+                </div>
+            <?php endif; ?>
+            <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]); ?>
+        </div>
+    </div>
+<?php else : ?>
+    <div class="alert alert-primary text-center my-3 fw-bold" role="alert">
+        Es wurde kein Eintrag gefunden.
+    </div>
+<?php endif; ?>

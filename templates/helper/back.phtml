@@ -1,0 +1,12 @@
+<?php
+
+use App\Service\AttributeService;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+?>
+<button type="button"
+        class="form-control btn <?= $elementAttributeService->getAttrValue('class') ?>" <?= $elementAttributeService->getAllWithout('class') ?>
+        onclick="window.location.href = '<?= $redirectUrl ?>'">
+    Zurück
+</button>

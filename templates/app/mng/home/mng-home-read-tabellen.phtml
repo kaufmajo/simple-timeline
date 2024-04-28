@@ -1,0 +1,112 @@
+<!-- init -->
+<?php
+$q1 = (int)($_GET['t'] ?? 1);
+?>
+
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Tabellen']) ?>
+
+<!-- nav -->
+<nav class="navbar navbar-dark bg-success mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/manage/home-read">Home</a>
+        <?php foreach (array_filter($tabellen, fn($item) => in_array(0, $item['parent'])) as $k => $t): ?>
+            <a class="navbar-brand fw-bold" href="/manage/home-read/tabellen?t=<?= $this->escape($k) ?>"><?= $this->escape($t['header']) ?></a>
+        <?php endforeach; ?>
+        <a class="navbar-brand fw-bold" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+
+<!-- container -->
+<div class="ms-3 mt-5 me-3">
+    <h1 class="fw-bold"><?= $this->escape($tabellen[$q1]['header']) ?></h1>
+    <h3 class="mb-3"><?= $this->escape($tabellen[$q1]['name']) ?></h3>
+    <!-- child -->
+    <div class="my-3">
+        <?php foreach (array_filter($tabellen, fn($item) => in_array($q1, $item['parent'])) as $k => $t): ?>
+            <a class="btn btn-success me-1" href="/manage/home-read/tabellen?t=<?= $this->escape($k) ?>"><?= $this->escape($t['header']) ?></a>
+        <?php endforeach; ?>
+    </div>
+    <!-- -->
+    <?php $this->insert('partial::xrecords', ['records' => $data, 'show_insert_searchtext_message' => false, 'attributes' => ['class' => 'mt-3'],]); ?>
+    <?php
+    $prev = null;
+    $current = $data->current();
+    $data->next();
+    $next = $data->current();
+    ?>
+    <?php if ($current) : ?>
+        <div class="my-3">
+            <input class="form-control" type="text" id="filter_input" onkeyup="filter()" placeholder="Type just a phrase or use - field1->phrase,field2->phrase ..." title="Type in ...">
+        </div>
+        <table class="table table-striped my-3" id="filter_table">
+            <thead>
+            <tr>
+                <?php foreach ($current as $k => $v) : ?>
+                    <th><?= $this->escape($k) ?></th>
+                <?php endforeach ?>
+            </tr>
+            </thead>
+            <?php while ($current) : ?>
+                <tr>
+                    <?php foreach ($current as $k => $v) : ?>
+                        <td class="text-truncate"> <?= $this->escape($v) ?> </td>
+                    <?php endforeach ?>
+                </tr>
+                <?php
+                $prev = $current;
+                $current = $next;
+                $data->next();
+                $next = $data->current();
+                ?>
+            <?php endwhile ?>
+        </table>
+    <?php endif ?>
+</div>
+<script>
+    function filter() {
+        // init
+        let input, table, xrecords, count;
+        input = document.getElementById("filter_input");
+        table = document.getElementById("filter_table");
+        xrecords = document.getElementById("xrecords-count");
+        count = 0;
+        // filter values
+        let filterValues = [];
+        input.value.split(',').forEach(function (element) {
+            let values = element.split('->', 2);
+            if (values.length === 1) {
+                filterValues.push(['all', values[0].trim(), false]);
+            } else {
+                filterValues.push([values[0].trim(), values[1].trim(), false]);
+            }
+        });
+        // header col
+        const tr = table.getElementsByTagName("tr");
+        const header = tr[0].getElementsByTagName("th");
+        // process
+        for (let i = 1; i < tr.length; i++) {
+            // reset filter values
+            filterValues.map(item => item[2] = false);
+            // check
+            const td = tr[i].getElementsByTagName("td");
+            for (let z = 0; z < td.length; z++) {
+                if (td[z]) {
+                    for (let x = 0; x < filterValues.length; x++) {
+                        if ('all' === filterValues[x][0] || header[z].textContent.toLowerCase() === filterValues[x][0].toLowerCase()) {
+                            if ((td[z].textContent || td[z].innerText).toLowerCase().indexOf(filterValues[x][1].toLowerCase()) > -1) {
+                                filterValues[x][2] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            //
+            if (filterValues.filter(item => item[2]).length === filterValues.length) {
+                tr[i].style.display = "";
+                xrecords.textContent = (++count).toString();
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>

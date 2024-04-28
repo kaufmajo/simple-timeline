@@ -1,0 +1,15 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Termin bearbeiten']) ?>
+
+<?php $this->push('javascript') ?>
+<script src="/js/app/mng-termin-write-modify.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+
+<div class="container mb-5">
+    <br>
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">Eintrag bearbeiten</h1>
+        </div>
+    </div>
+    <?php $this->insert('app::mng/termin/form-termin-partial', ['terminForm' => $terminForm, 'redirectUrl' => $redirectUrl, 'datalist' => $datalist]); ?>
+</div>

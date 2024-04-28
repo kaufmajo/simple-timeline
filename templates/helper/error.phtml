@@ -1,0 +1,5 @@
+<?php if ($showErrorMessage && 'hidden' !== $element->getAttributes()['type'] && $element->getMessages()) : ?>
+    <div id="<?= $element->getAttribute('id') ?>Feedback" class="invalid-feedback">
+        <?= current($element->getMessages()) ?>
+    </div>
+<?php endif; ?>

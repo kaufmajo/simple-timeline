@@ -1,0 +1,95 @@
+<?php
+//var_dump($security);
+?>
+
+<?php $this->layout('layout::default', ['title' => 'EGLi - Cleanup']) ?>
+
+<!-- nav -->
+<nav class="navbar navbar-dark bg-danger mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-white" href="/manage/home-read">Home</a>
+        <a class="navbar-brand fw-bold text-white" href="/manage/home-read/initconfig">Config</a>
+        <a class="navbar-brand fw-bold text-white" href="/cleanup">Cleanup</a>
+        <a class="navbar-brand fw-bold text-white" href="/manage/home-read/phpinfo">PHP</a>
+        <?php if ($security) : ?>
+            <a class="navbar-brand fw-bold text-white" href="/app-logout">Abmelden</a>
+        <?php endif; ?>
+    </div>
+</nav>
+
+<!-- container -->
+<div class="container my-5">
+    <h1 class="fw-bold">Cleanup</h1>
+    <div class="d-flex mt-5 justify-content-start gap-3 flex-wrap">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">Termin</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_termin) ?></p>
+            </div>
+            <div class="card-footer text-secondary">
+                abgelaufen und älter als <?= $this->escape($cleanup_tage_termine) ?> Tage
+            </div>
+        </div>
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">Datum</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_datum) ?></p>
+            </div>
+            <div class="card-footer text-secondary">
+                abgelaufen und älter als <?= $this->escape($cleanup_tage_termine) ?> Tage
+            </div>
+        </div>
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">Termin-History</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_termin_history) ?></p>
+            </div>
+            <div class="card-footer text-secondary">
+                älter als <?= $this->escape($cleanup_tage_termin_history) ?> Tage
+            </div>
+        </div>
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">History</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_history) ?></p>
+            </div>
+            <div class="card-footer text-secondary">
+                älter als <?= $this->escape($cleanup_tage_history) ?> Tage
+            </div>
+        </div>
+    </div>
+    <div class="d-flex mt-5 justify-content-start gap-3 flex-wrap align-items-start">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">Media-Datei</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_media) ?></p>
+            </div>
+            <?php if ($cleanup_files_media) : ?>
+                <div class="card-footer text-secondary">
+                    <ul>
+                        <?php usort($cleanup_files_media, fn ($x, $y) => $x[1] <=> $y[1]); ?>
+                        <?php foreach ($cleanup_files_media as $file) : ?>
+                            <li><?= $this->escape(date("F d Y H:i:s", $file[1])) ?> - <?= $this->escape($file[0]) ?></li>
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h5 class="card-title">Temp-Datei</h5>
+                <p class="card-text fs-1"><?= $this->escape($cleanup_anzahl_temp) ?></p>
+            </div>
+            <?php if ($cleanup_files_temp) : ?>
+                <div class="card-footer text-secondary">
+                    <ul>
+                        <?php usort($cleanup_files_temp, fn ($x, $y) => $x[1] <=> $y[1]); ?>
+                        <?php foreach ($cleanup_files_temp as $file) : ?>
+                            <li><?= $this->escape(date("F d Y H:i:s", $file[1])) ?> - <?= $this->escape($file[0]) ?></li>
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

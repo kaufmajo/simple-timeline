@@ -1,0 +1,11 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Suchen']) ?>
+<?php $this->push('javascript') ?>
+<script src="/js/app/def-termin-search.js?u=<?= REFRESH_STATIC_FILES ?>" type="module"></script>
+<?php $this->end() ?>
+<?php $this->insert('app-partial::___search', [
+    'data' => $terminCollection,
+    'redirectUrl' => $redirectUrl,
+    'form' => $defTerminSearchForm,
+    'datalist' => $datalist,
+    'manage' => true,
+]) ?>

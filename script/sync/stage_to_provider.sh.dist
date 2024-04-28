@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+rsync -avhe ssh --exclude-from 'stage_to_provider___exclude-filter.txt' /var/www/jk1/ user@provider.com:/app_rootpath/
+
+ssh user@provider.com 'rm /app_rootpath/data/cache/*.php'

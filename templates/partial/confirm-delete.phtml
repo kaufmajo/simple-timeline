@@ -1,0 +1,23 @@
+<h1>Sind Sie sicher?</h1>
+<div class="alert alert-secondary" role="alert">
+    <?php if ($entity->getEntityLabel()) : ?>
+        <table class="table">
+            <?php foreach ($entity->getEntityLabel() as $key => $value): ?>
+                <tr>
+                    <th scope="row" class="align-top">
+                        <?= $this->escapeHtml($key) ?>:
+                    </th>
+                    <td class="align-top">
+                        <?= $this->escapeHtml($value ?? '') ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+    <br>
+    <form action="" method="post">
+        <input type="hidden" name="id" value="<?= $this->escapeHtmlAttr($entity->getEntityId()) ?>"/>
+        <input class="btn btn-danger" type="submit" name="confirm" value="Löschen"/>
+        <input class="btn btn-dark" type="submit" name="cancel" value="Abbrechen"/>
+    </form>
+</div>

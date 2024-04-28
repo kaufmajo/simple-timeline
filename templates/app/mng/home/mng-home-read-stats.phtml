@@ -1,0 +1,63 @@
+<?php
+// init
+?>
+
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Stats']) ?>
+
+<!-- nav -->
+<nav class="navbar navbar-dark bg-warning mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-dark" href="/manage/home-read">Home</a>
+        <a class="navbar-brand fw-bold text-dark" href="/manage/home-read/stats?gip=1">Gruppiert (IP)</a>
+        <a class="navbar-brand fw-bold text-dark" href="/manage/home-read/stats?gip=0">Ungruppiert</a>
+        <a class="navbar-brand fw-bold text-dark" href="/app-logout">Abmelden</a>
+    </div>
+</nav>
+
+<!-- container -->
+<div class="ms-3 mt-5 me-3">
+    <h1 class="fw-bold">History Statistik</h1>
+    <div class="alert alert-warning">
+        Nach einem Cleanup beinhaltet die Statistik die Daten der letzten <?= $this->escape($myInitConfig['cleanup_tage_history']) ?> Tage.
+        <br><br>
+        Eine IP-Adresse kann aus der Statistik mit dem QueryParameter [&exip=1.2.3.4] ausgeschlossen werden:
+        <a class="navbar-brand fw-bold link-warning" href="/manage/home-read/stats?gip=1&exip=">Gruppiert (IP)</a> oder
+        <a class="navbar-brand fw-bold link-warning" href="/manage/home-read/stats?gip=0&exip=">Ungruppiert</a>
+    </div>
+    <?php $this->insert('partial::xrecords', ['records' => $stats, 'show_insert_searchtext_message' => false]); ?>
+    <?php
+    // sort stats
+    usort($stats, function ($accA, $accB) {
+        return $accB['anzahl'] <=> $accA['anzahl'];
+    });
+    // init loop
+    $prev = null;
+    $current = current($stats);
+    next($stats);
+    $next = current($stats);
+    ?>
+    <?php if ($current) : ?>
+        <table class="table table-striped my-3">
+            <thead>
+            <tr>
+                <th>Anzahl</th>
+                <th>Url</th>
+                <th></th>
+            </tr>
+            </thead>
+            <?php while ($current) : ?>
+                <tr>
+                    <td class="text-truncate"> <?= $this->escape($current['anzahl']) ?> </td>
+                    <td class="text-truncate"> <?= $this->escape($current['url']) ?> </td>
+                    <td class="text-truncate"> <?= '' //implode(";", $current['ip']) ?> </td>
+                </tr>
+                <?php
+                $prev = $current;
+                $current = $next;
+                next($stats);
+                $next = current($stats);
+                ?>
+            <?php endwhile ?>
+        </table>
+    <?php endif ?>
+</div>

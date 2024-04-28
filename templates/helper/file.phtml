@@ -1,0 +1,11 @@
+<?php
+
+use App\Service\AttributeService;
+
+// attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes ?? []);
+
+?>
+<input class="<?= $elementAttributeService->getAttrValue('class') ?> <?= ($element->getMessages() ? 'is-invalid' : '') ?>" <?= $elementAttributeService->getAllWithout('class') ?> value="">
+
+<?php $this->insert('helper::error', ['element' => $element, 'showErrorMessage' => $showErrorMessage ?? true]) ?>

@@ -1,0 +1,19 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Login']) ?>
+<?php $this->push('stylesheet') ?>
+<link href="/css/app/def-app-login.css?u=<?= REFRESH_STATIC_FILES ?>" rel="stylesheet">
+<?php $this->end() ?>
+<!--suppress SpellCheckingInspection -->
+<main class="form-signin text-center">
+    <form action="" method="POST">
+        <input type="hidden" name="__csrf" value="<?= $__csrf ?>"/>
+        <div class="form-floating">
+            <input name="username" type="text" class="form-control" id="inputUsername" placeholder="Benutzername" required autofocus>
+            <label for="inputUsername">Username</label>
+        </div>
+        <div class="form-floating">
+            <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Passwort" required>
+            <label for="inputPassword">Passwort</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Absenden</button>
+    </form>
+</main>

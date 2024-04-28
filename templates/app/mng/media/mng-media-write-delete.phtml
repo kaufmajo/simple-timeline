@@ -1,0 +1,21 @@
+<?php $this->layout('layout::default', ['title' => 'EGLi (Manage) - Media löschen']); ?>
+
+<?php $this->push('stylesheet') ?>
+<?php $this->end() ?>
+
+<?php $this->push('javascript') ?>
+<?php $this->end() ?>
+
+<div class="container mb-5">
+    <br>
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">Media löschen</h1>
+        </div>
+    </div>
+    <?php
+    $this->insert('partial::confirm-delete', [
+        'entity' => $mediaEntity,
+    ]);
+    ?>
+</div>

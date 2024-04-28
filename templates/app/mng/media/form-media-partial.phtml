@@ -1,0 +1,61 @@
+<?php $mediaForm->prepare() ?>
+<?php $this->insert('partial::formerror', ['form' => $mediaForm, 'showMessages' => false]); ?>
+<form action="<?= $mediaForm->getAttribute('action') ?>" method="<?= $mediaForm->getAttribute('method') ?>" name="<?= $mediaForm->getName() ?>" id="<?= $mediaForm->getName() ?>" enctype="<?= $mediaForm->getAttribute('enctype') ?>">
+    <!-- hidden -->
+    <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_id')]) ?>
+    <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_groesse')]) ?>
+    <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_mimetype')]) ?>
+    <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_hash')]) ?>
+    <!-- end hidden -->
+    <div class="row my-3 g-2">
+        <div class="col-md-12">
+            <div class="form-check">
+                <?php $this->insert('helper::checkbox', ['element' => $mediaForm->get('media_privat'), 'attributes' => ['class' => 'form-check-input']]) ?>
+                <?php $this->insert('helper::label', ['element' => $mediaForm->get('media_privat'), 'attributes' => ['class' => 'form-check-label']]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-12">
+            <?php $this->insert('helper::file', ['element' => $mediaForm->get('media_datei'), 'attributes' => ['class' => 'form-control']]) ?>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-12">
+            <div class="form-floating">
+                <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_anzeige'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $mediaForm->get('media_anzeige'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-6">
+            <div class="form-floating">
+                <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_von'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $mediaForm->get('media_von'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_bis'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $mediaForm->get('media_bis'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-12">
+            <div class="form-floating">
+                <?php $this->insert('helper::input', ['element' => $mediaForm->get('media_tag'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['tag'], 'id' => 'media-box-datalist']]) ?>
+                <?php $this->insert('helper::label', ['element' => $mediaForm->get('media_tag'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-2">
+            <?php $this->insert('helper::submit', ['element' => $mediaForm->get('submit'), 'attributes' => ['class' => 'btn-info']]) ?>
+        </div>
+        <div class="col-md-2">
+            <?php $this->insert('helper::back', ['redirectUrl' => $redirectUrl, 'attributes' => ['class' => 'btn-info']]) ?>
+        </div>
+    </div>
+</form>

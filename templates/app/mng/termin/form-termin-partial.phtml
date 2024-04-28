@@ -1,0 +1,248 @@
+<?php $terminForm->prepare() ?>
+<?php $this->insert('partial::formerror', ['form' => $terminForm, 'showMessages' => false]); ?>
+<form action="<?= $terminForm->getAttribute('action') ?>" method="<?= $terminForm->getAttribute('method') ?>"
+      name="<?= $terminForm->getName() ?>" id="<?= $terminForm->getName() ?>"
+      enctype="<?= $terminForm->getAttribute('enctype') ?>">
+    <!-- hidden -->
+    <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_id')]) ?>
+    <!-- end hidden -->
+    <div class="row mb-5 g-2">
+        <div class="col-md-4">
+            <div class="form-floating">
+                <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_ist_konfliktrelevant'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_ist_konfliktrelevant'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-floating">
+                <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_aktiviere_drucken'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_aktiviere_drucken'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-floating">
+                <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_zeige_konflikt'), 'attributes' => ['class' => 'form-control']]) ?>
+                <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeige_konflikt'), 'attributes' => ['class' => 'form-label']]) ?>
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" id="termin-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="termin-tab" data-bs-toggle="tab" data-bs-target="#termin" type="button"
+                    role="tab">Termin
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="zeit-tab" data-bs-toggle="tab" data-bs-target="#zeit" type="button" role="tab">
+                Zeit
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="option-tab" data-bs-toggle="tab" data-bs-target="#option" type="button"
+                    role="tab">Optionen
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="serie-tab" data-bs-toggle="tab" data-bs-target="#serie" type="button"
+                    role="tab">Serie
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="notiz-tab" data-bs-toggle="tab" data-bs-target="#notiz" type="button"
+                    role="tab">Notiz
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane show active" id="termin" role="tabpanel">
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_ansicht'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_ansicht'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_status'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_status'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_kategorie'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['kategorie'], 'id' => 'kategorie-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_kategorie'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_betreff'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['betreff'], 'id' => 'betreff-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_betreff'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::textarea', ['element' => $terminForm->get('termin_text'), 'attributes' => ['class' => 'form-control', 'style' => 'height: 100px;']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_text'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="zeit" role="tabpanel">
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_datum_start'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_datum_start'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_datum_ende'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_datum_ende'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_zeit_ganztags'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeit_ganztags'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_zeit_start'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeit_start'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_zeit_ende'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeit_ende'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_zeige_einmalig'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeige_einmalig'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_zeige_tagezuvor'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_zeige_tagezuvor'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="option" role="tabpanel">
+            <div class="row my-1 g-2">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_mitvon'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['mitvon'], 'id' => 'mitvon-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_mitvon'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_link'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['link'], 'id' => 'link-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_link'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_link_titel'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['link_titel'], 'id' => 'link-titel-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_link_titel'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php $this->insert('helper::file', ['element' => $terminForm->get('media_datei_link'), 'attributes' => ['class' => 'form-control']]) ?>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_link2'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['link'], 'id' => 'link-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_link2'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_link2_titel'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['link_titel'], 'id' => 'link-titel-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_link2_titel'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php $this->insert('helper::file', ['element' => $terminForm->get('media_datei_link2'), 'attributes' => ['class' => 'form-control']]) ?>
+                </div>
+            </div>
+            <div class="row my-1 g-2">
+                <div class="col-md-1">
+                    <div class="form-floating">
+                        <img id="img-image-preview" src="/img/image.png" style="width: 100%;" alt="Preview Image">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_image'), 'attributes' => ['class' => 'form-control'], 'datalist' => ['list' => $datalist['image'], 'id' => 'image-datalist']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_image'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <?php $this->insert('helper::file', ['element' => $terminForm->get('media_datei_bild'), 'attributes' => ['class' => 'form-control']]) ?>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="serie" role="tabpanel">
+            <div class="row my-1 g-2">
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_serie_intervall'), 'attributes' => ['class' => 'form-select']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_serie_intervall'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::select', ['element' => $terminForm->get('termin_serie_wiederholung'), 'attributes' => ['class' => 'form-select']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_serie_wiederholung'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::input', ['element' => $terminForm->get('termin_serie_ende'), 'attributes' => ['class' => 'form-control']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_serie_ende'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="notiz" role="tabpanel">
+            <div class="row my-1 g-2">
+                <div class="col-md-12">
+                    <div class="form-floating">
+                        <?php $this->insert('helper::textarea', ['element' => $terminForm->get('termin_notiz'), 'attributes' => ['class' => 'form-control', 'style' => 'height: 500px;']]) ?>
+                        <?php $this->insert('helper::label', ['element' => $terminForm->get('termin_notiz'), 'attributes' => ['class' => 'form-label']]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-1 g-2">
+        <div class="col-md-2">
+            <?php $this->insert('helper::submit', ['element' => $terminForm->get('submit'), 'attributes' => ['class' => 'btn-primary']]) ?>
+        </div>
+        <div class="col-md-2">
+            <?php $this->insert('helper::back', ['redirectUrl' => $redirectUrl, 'attributes' => ['class' => 'btn-primary']]) ?>
+        </div>
+    </div>
+</form>

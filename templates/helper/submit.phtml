@@ -1,0 +1,8 @@
+<?php
+
+use App\Service\AttributeService;
+
+// element attributes
+$elementAttributeService = new AttributeService($element->getAttributes(), $attributes);
+?>
+<input class="form-control btn <?= $elementAttributeService->getAttrValue('class') ?>" <?= $elementAttributeService->getAllWithout('class') ?> value="<?= $this->escape($element->getValue()) ?>">

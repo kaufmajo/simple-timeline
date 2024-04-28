@@ -1,0 +1,200 @@
+<?php
+
+use App\Enum\TerminAnsichtEnum;
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+use App\Service\HelperService;
+use JK\DTF\DTF;
+
+// init
+$terminCollection = $data;
+$terminIdParam = $terminIdParam;
+$dateParam = $dateParam;
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+// user
+$loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentity() : false;
+
+?>
+<!-- container -->
+<div class="container-fluid calendar p-0 bg-primary">
+    <div class="fs-1 d-flex align-items-center justify-content-between py-4 mx-3">
+        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-left-fill"></i>
+        </a>
+        <span class="fw-bold text-bg-primary">
+            <?php if ($terminCollection->isReferenzThisYear()) : ?>
+                <?= $this->escape(DTF::format($terminCollection->getReferenzDatum(), "LLLL")) ?>
+            <?php else : ?>
+                <?= $this->escape(DTF::format($terminCollection->getReferenzDatum(), "LLLL yy")) ?>
+            <?php endif ?>
+            <a class="link-light" href="<?= $searchUrl ?>"><i class="bi bi-search ms-3"></i></a>
+        </span>
+        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of next month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-right-fill"></i>
+        </a>
+    </div>
+    <ol class="p-0 mb-0 bg-dark-subtle">
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Mo</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Di</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Mi</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Do</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Fr</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-light-subtle text-body-emphasis">Sa</li>
+        <li class="d-none d-xxl-inline fw-bold p-2 fs-3 bg-body-tertiary text-body-emphasis">So</li>
+        <?php foreach ($terminCollection as $termin) : ?>
+            <?php
+            $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
+            ?>
+            <?php if ($terminCollection->isFirst() || $terminCollection->current['datum_datum'] !== $terminCollection->previous['datum_datum']) : ?>
+                <?php
+                $listClass = $terminCollection->isDatumSunday() ? 'bg-body-tertiary' : 'bg-light-subtle';
+                $listClass .= !$terminCollection->isDatumWithinReferenceMonth() ? ' d-none d-xxl-block' : '';
+                ?>
+                <li class="position-relative p-2 <?= $listClass ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
+                    <div class="d-flex justify-content-between w-100">
+                        <div class="d-flex justify-content-between w-100 fw-light text-body-secondary">
+                            <div>
+                                <?php if ($terminCollection->isDatumToday()) : ?>
+                                    <span class="badge text-bg-warning fw-bold">Heute</span>
+                                <?php else : ?>
+                                    <span><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
+                                    <span class="ms-1 d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
+                                <?php endif ?>
+                            </div>
+                            <div class="d-xxl-none">
+                                <?= $this->escape(DTF::format($terminCollection->getDatum(), 'eeee')) ?>
+                            </div>
+                        </div>
+                        <?php if ($loggedIn) : ?>
+                            <a class="link-secondary" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format('Y-m-d') ?>" title="Anlegen"><i class="bi bi-plus-circle ms-2"></i></a>
+                        <?php endif ?>
+                    </div>
+                <?php endif ?>
+                <?php if ($terminCollection->hasTermin()) : ?>
+                    <?php
+                    $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
+                    $linkColor = TerminAnsichtEnum::NONE->value === $termin['termin_ansicht'] ? 'link-danger' : 'text-secondary-emphasis';
+                    $highlightAttribute = $terminIdParam === $termin['termin_id'] ? HelperService::getAttribute('data-highlight', '1') : '';
+                    ?>
+                    <?php if ($termin['termin_image'] && $terminCollection->fromMemory('image', $termin['termin_id'])) : ?>
+                        <a href="/show/<?= $this->escape($termin['termin_id']) ?>?back=<?= $prevnextUrl ?>" class="<?= $linkColor ?> text-decoration-none" <?= HelperService::getAnchorAttribute($terminCollection->fromMemory('anchor', $termin['termin_id'])) ?>>
+                            <img class="d-block d-xxl-none my-2 w-100" src="<?= $this->media($termin['termin_image']) ?>?w=1200" alt="Thumbnail">
+                        </a>
+                    <?php endif ?>
+                    <div class="py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">
+                        <div class="me-2 text-secondary" style="min-width: 40px;">
+                            <?php if (!$termin['termin_zeit_ganztags']) : ?>
+                                <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) . '' ?>
+                            <?php endif; ?>
+                        </div>
+                        <div <?= $highlightAttribute ?>>
+                            <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]) ?>
+                            <?php if (TerminStatusEnum::MITTEILUNG->value === $termin['termin_status']) : ?>
+                                <i class="bi bi-info-circle-fill me-1 text-warning"></i>
+                            <?php endif ?>
+                            <a href="/show/<?= $this->escape($termin['termin_id']) ?>?back=<?= $prevnextUrl ?>" class="<?= $linkColor ?> text-decoration-none" <?= HelperService::getAnchorAttribute($terminCollection->fromMemory('anchor', $termin['termin_id'])) ?>>
+                                <span class="me-2">
+                                    <?= $this->escape($termin['termin_betreff']) ?>
+                                </span>
+                                <?php if (!$termin['termin_zeige_einmalig'] && $termin['_anzahl_tage'] > 1) : ?>
+                                    <span class="opacity-50 me-2">
+                                        (Tag&nbsp;<?= intval((new DateTime($termin['termin_datum_start']))->diff(new DateTime($termin['datum_datum']))->format('%R%a')) + 1 ?>/<?= $termin['_anzahl_tage'] ?>)
+                                    </span>
+                                <?php endif; ?>
+                                <?php if ($termin['termin_mitvon']) : ?>
+                                    <span class="me-2">
+                                        (<?= $this->escape($termin['termin_mitvon']) ?>)
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                            <?php if ($termin['termin_link'] || $termin['termin_link2']) : ?>
+                                <?php if ($termin['termin_link']) : ?>
+                                    <a class="text-decoration-none" href="<?= $this->escape($termin['termin_link']) ?>">
+                                        <?= $this->escape($termin['termin_link_titel'] ?? 'Link') ?>
+                                    </a>
+                                <?php endif ?>
+                                <?php if ($termin['termin_link2']) : ?>
+                                    | <a class="text-decoration-none" href="<?= $this->escape($termin['termin_link2']) ?>">
+                                        <?= $this->escape($termin['termin_link2_titel'] ?? 'Link') ?>
+                                    </a>
+                                <?php endif ?>
+                            <?php endif ?>
+                            <?php if ($termin['termin_text']) : ?>
+                                <?php if ($termin['termin_text']) : ?>
+                                    <div class="opacity-50">
+                                        <?= nl2br($this->escape(HelperService::string_substrWords($termin['termin_text'], 30))) ?>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif ?>
+                            <?php if ((new DateTime($termin['datum_datum']))->format('Y-m-d') !== (new DateTime())->format('Y-m-d')) : ?>
+                                <?php if ($termin['_is_new']) : ?>
+                                    <!-- new indicator -->
+                                    <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 d-table">Neu</span>
+                                <?php elseif ($termin['_is_updated']) : ?>
+                                    <!-- update indicator -->
+                                    <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 d-table">Aktualisiert</span>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]) ?>
+                            <?php if ($loggedIn) : ?>
+                                <div>
+                                    <?php if ($termin['_fehlbuchung'] && ($termin['termin_zeige_konflikt'])) : ?>
+                                        <div class="btn-group" role="group">
+                                            <?php foreach (explode('+++', $termin['_fehlbuchung']) as $k) : ?>
+                                                <?php $v = explode('---', $k) ?>
+                                                <?php if (strtotime($termin['datum_datum']) >= strtotime($v[4]) && strtotime($termin['datum_datum']) <= strtotime($v[5])) : ?>
+                                                    <span class="badge bg-danger-subtle text-danger-emphasis fw-bold mt-1"><?= $this->escape($v[1]) ?><?php if ($v[2]) : ?> - <?= $this->escape($v[2]) ?><?php endif ?></span>
+                                                <?php endif ?>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif ?>
+                                    <?php if ($termin['termin_notiz']) : ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1">Notiz</span>
+                                    <?php endif; ?>
+                                    <?php if ($termin['termin_zeige_einmalig']) : ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1">Einmalig</span>
+                                    <?php endif; ?>
+                                    <?php if ($termin['termin_zeige_tagezuvor']) : ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1">Tage zuvor <?= $termin['termin_zeige_tagezuvor'] ?></span>
+                                    <?php endif; ?>
+                                    <?php if (!$termin['termin_aktiviere_drucken']) : ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 text-decoration-line-through">Druckrelevant</span>
+                                    <?php endif; ?>
+                                    <?php if (!$termin['termin_ist_konfliktrelevant']) : ?>
+                                        <!-- <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 text-decoration-line-through">Konfliktrelevant</span> -->
+                                    <?php endif; ?>
+                                    <?php if (!$termin['termin_zeige_konflikt']) : ?>
+                                        <!-- <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 text-decoration-line-through">Konfliktanzeige</span> -->
+                                    <?php endif; ?>
+                                    <div class="dropdown">
+                                        <button class="ps-0 btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-list"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="/manage/termin-write/update/<?= $termin['termin_id'] ?>">Bearbeiten</a></li>
+                                            <li><a class="dropdown-item" href="/manage/termin-write/copy/<?= $termin['termin_id'] ?>">Kopieren</a></li>
+                                            <li><a class="dropdown-item" href="/manage/termin-write/delete/<?= $termin['termin_id'] ?>">Löschen</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                <?php endif ?>
+                <?php if ($terminCollection->isLast() || $terminCollection->current['datum_datum'] !== $terminCollection->next['datum_datum']) : ?>
+                </li>
+            <?php endif ?>
+        <?php endforeach ?>
+    </ol>
+    <div class="d-xxl-none fs-1 d-flex align-items-center justify-content-between py-1 mx-3">
+        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-left-fill"></i>
+        </a>
+        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of next month')->format('Y-m-d') ?>">
+            <i class="bi bi-caret-right-fill"></i>
+        </a>
+    </div>
+</div>

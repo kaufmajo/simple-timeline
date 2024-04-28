@@ -1,0 +1,100 @@
+<?php
+
+use App\Enum\TerminStatusEnum;
+use App\Service\AttributeService;
+use App\Service\HelperService;
+use JK\DTF\DTF;
+
+// init
+$terminCollection = $data;
+$redirectUrl = $redirectUrl;
+$form = $form;
+$datalist = $datalist;
+$manage = $manage;
+$event_nav = $manage ? '/manage/termin-calendar' : '/';
+
+// attributes
+$elementAttributeService = new AttributeService([], $attributes ?? []);
+
+?>
+<div class="container">
+    <div class="position-absolute top-0 end-0 m-3">
+        <a class="link-body-emphasis text-decoration-none" href="<?= $redirectUrl ?>"><i class="bi bi-x-lg fs-1"></i></a>
+    </div>
+    <h1 class="text-center mt-5 fw-bold">Suchen</h1>
+    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+        <div class="my-5">
+            <?php if ($form->getMessages()) : ?>
+                <?php $this->insert('partial::formerror', ['form' => $form, 'showMessages' => false]); ?>
+            <?php endif; ?>
+            <?php $form->setAttributes([])->prepare() ?>
+            <form action="<?= $form->getAttribute('action') ?>" method="<?= $form->getAttribute('method') ?>" name="<?= $form->getName() ?>" id="<?= $form->getName() ?>">
+                <div class="input-group">
+                    <?php $this->insert('helper::input', [
+                        'element' => $form->get('search_suchtext'),
+                        'attributes' => [
+                            'placeholder' => '',
+                            'class' => 'form-control text-sm-center border-end-0',
+                            "autocomplete" => "off",
+                        ],
+                        'datalist' => [
+                            'list' => $datalist,
+                            'id' => 'search-datalist',
+                        ],
+                        'showErrorMessage' => false,
+                    ]) ?>
+                    <span class="input-group-text m-0 p-0">
+                        <button id="input-search-submit" name="submit-button" type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <?php if ($terminCollection->count()) : ?>
+            <?php while ($terminCollection->current) : ?>
+                <?php if ($terminCollection->hasTermin()) : ?>
+                    <?php
+                    $termin = $terminCollection->current;
+                    $wrapperTag = TerminStatusEnum::GESTRICHEN->value === $termin['termin_status'] ? ['del'] : [];
+                    ?>
+                    <div class="row">
+                        <div class="col-12 fs-3 fw-light">
+                            <div class="fs-6 d-flex justify-content-between w-100">
+                                <div>
+                                    <?= HelperService::format_displayDate(
+                                        $termin['termin_datum_start'],
+                                        $termin['termin_datum_ende']
+                                    )  ?>
+                                </div>
+                                <?php if ($termin['termin_datum_start'] === $termin['termin_datum_ende']) : ?>
+                                    <div>
+                                        <?= $this->escape(DTF::format(new DateTime($termin['termin_datum_start']), 'eeee')) ?>
+                                    </div>
+                                <?php endif ?>
+                            </div>
+                            <?php $this->insert('partial::wrappertags', ['type' => 'open', 'tags' => $wrapperTag]); ?>
+                            <a class="link-body-emphasis text-decoration-none" href="<?= $event_nav ?>?id=<?= $termin['termin_id'] ?>&date=<?= $termin['termin_datum_start'] ?>#<?= $this->escape(HelperService::getAnchorString($termin['termin_datum_start'])) ?>">
+                                <?= $termin['termin_betreff'] ?>
+                                <?php if ($termin['termin_mitvon']) : ?>
+                                    (<?= $termin['termin_mitvon'] ?>)
+                                <?php endif ?>
+                            </a>
+                            <?php $this->insert('partial::wrappertags', ['type' => 'close', 'tags' => $wrapperTag]); ?>
+                        </div>
+                    </div>
+                    <?php if (!$terminCollection->isLast()) : ?>
+                        <hr class="my-3">
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php
+                $terminCollection->next();
+                ?>
+            <?php endwhile; ?>
+        <?php elseif (!empty($_GET)) : ?>
+            <div class="alert alert-primary text-center my-3 fw-bold" role="alert">
+                Es wurden keine Termine gefunden.
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

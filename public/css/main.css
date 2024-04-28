@@ -1,0 +1,74 @@
+/*
+ tags
+*/
+
+* {
+    border-radius: 0 !important;
+}
+
+/*
+html, body {
+    height: 100%;
+}
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+}
+
+del,
+mark {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+a {
+    /*text-decoration: none;*/
+}
+
+
+/*
+ classes
+ */
+
+.is-invalid {
+    border-width: 2px;
+    border-color: var(--bs-danger-border-subtle) !important;
+}
+
+.invalid-feedback {
+    color: var(--bs-danger-text-emphasis);
+}
+
+/*
+corner button
+*/
+
+.corner_button {
+    display: none;
+    position: fixed;
+    z-index: 99;
+    border: var(--bs-dark-border-subtle) 1px solid;
+    outline: none;
+    cursor: pointer;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+.corner_button:hover {
+    background-color: var(--bs-dark-bg-subtle);
+    color: var(--bs-dark-text-emphasis);
+    opacity: 1;
+}
+
+.top_corner_button {
+    bottom: 20px;
+    right: 20px;
+}
