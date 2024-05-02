@@ -26,7 +26,7 @@ $terminEntity = $terminEntity;
         <div class="m-1 text-center" style="max-width: 1200px;">
             <h3 class="fw-light">
                 <?= $this->escape(HelperService::format_displayDate($terminEntity->getTerminDatumstart(), $terminEntity->getTerminDatumEnde())) ?>
-                <?php if (!$terminEntity->getTerminZeitGanztags() && $terminEntity->getTerminZeitstart()) : ?>
+                <?php if (!$terminEntity->getTerminZeitGanztags()) : ?>
                     - <?= $this->escape(HelperService::format_displayTime($terminEntity->getTerminZeitstart())) ?>
                 <?php endif; ?>
             </h3>

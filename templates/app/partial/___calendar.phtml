@@ -87,7 +87,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                     <div class="py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">
                         <div class="me-2 text-secondary" style="min-width: 40px;">
                             <?php if (!$termin['termin_zeit_ganztags']) : ?>
-                                <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) . '' ?>
+                                <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) ?>
                             <?php endif; ?>
                         </div>
                         <div <?= $highlightAttribute ?>>

@@ -11,9 +11,6 @@ const inputIntervall = document.getElementById("select-termin-serie-intervall");
 const inputWiederholung = document.getElementById("select-termin-serie-wiederholung");
 const inputDatumStart = document.getElementById("input-termin-datum-start");
 const inputDatumEnde = document.getElementById("input-termin-datum-ende");
-const inputZeitGanztags = document.getElementById("input-termin-zeit-ganztags");
-const inputZeitStart = document.getElementById("input-termin-zeit-start");
-const inputZeitEnde = document.getElementById("input-termin-zeit-ende");
 let datumStartPreviousValue;
 let datumEndePreviousValue;
 
@@ -21,8 +18,6 @@ let datumEndePreviousValue;
 // run when page loads
 
 populateSelectIntervall();
-
-toggleOnInputZeitGanztags();
 
 // ----------------------------------------------------------------------------
 
@@ -81,11 +76,6 @@ inputDatumStart.addEventListener("change", function () {
 });
 
 // ----------------------------------------------------------------------------
-// toggle zeit fields
-
-inputZeitGanztags.addEventListener("change", toggleOnInputZeitGanztags);
-
-// ----------------------------------------------------------------------------
 // populate controls
 
 function populateSelectIntervall() {
@@ -93,22 +83,12 @@ function populateSelectIntervall() {
 
     for (let i = 0, len = options.length; i < len; i++) {
         if (options[i].dataset.intervall === inputIntervall.value || options[i].value === '') {
+            options[i].disabled = false;
             options[i].style.display = "block";
         } else {
+            options[i].disabled = true
             options[i].style.display = "none";
         }
-    }
-}
-
-// ----------------------------------------------------------------------------
-
-function toggleOnInputZeitGanztags() {
-    if (inputZeitGanztags.checked === true) {
-        inputZeitStart.readOnly = true;
-        inputZeitEnde.readOnly = true;
-    } else {
-        inputZeitStart.readOnly = false;
-        inputZeitEnde.readOnly = false;
     }
 }
 
