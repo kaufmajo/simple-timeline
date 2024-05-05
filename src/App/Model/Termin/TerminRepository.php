@@ -172,8 +172,8 @@ class TerminRepository extends AbstractRepository implements TerminRepositoryInt
                 'termin_status'                  => 'termin_status',
                 'termin_datum_start'             => 'termin_datum_start',
                 'termin_datum_ende'              => 'termin_datum_ende',
-                'termin_zeit_start'              => 'termin_zeit_start',
-                'termin_zeit_ende'               => 'termin_zeit_ende',
+                'termin_zeit_start'              => new Sql\Expression('IF(termin_datum_start = datum_datum, termin_zeit_start, null)'),
+                'termin_zeit_ende'               => new Sql\Expression('IF(termin_datum_ende = datum_datum, termin_zeit_ende, null)'),
                 'termin_zeit_ganztags'           => 'termin_zeit_ganztags',
                 'termin_betreff'                 => 'termin_betreff',
                 'termin_text'                    => 'termin_text',
@@ -262,8 +262,8 @@ class TerminRepository extends AbstractRepository implements TerminRepositoryInt
             $select->limit($params['limit']);
         }
 
-        // echo $select->getSqlString($this->dbRunner->getDb()->platform);
-        // die;
+        //  echo $select->getSqlString($this->dbRunner->getDb()->platform);
+        //  die;
 
         return $this->fetch($select, false);
     }
