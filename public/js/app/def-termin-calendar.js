@@ -37,8 +37,8 @@ const highlightElements = document.querySelectorAll("[data-highlight='1']");
 
 for (let i = 0, len = highlightElements.length; i < len; i++) {
     const listItem = highlightElements[i].closest("li");
-    listItem.classList.remove("highlight");
     setTimeout(function () { listItem.classList.add("highlight") }, 100);
+    listItem.addEventListener("transitionend", () => { listItem.classList.remove("highlight") });
 }
 
 // ---------------------------------------------------------------------------

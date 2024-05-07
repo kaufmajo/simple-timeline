@@ -30,7 +30,7 @@ ol>li {
 }
 
 .highlight {
-    transform: rotate(360deg);
-    transition: 1s linear;
+    transform: rotateY(360deg);
+    transition: 2s linear;
     z-index: 9999;
 }
