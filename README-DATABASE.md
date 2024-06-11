@@ -36,7 +36,7 @@ SHOW GRANTS FOR 'developer1'@'192.168.1.1';
 You can create a user that has privileges similar to the default root accounts by executing the following:
 
 ```sql
-CREATE USER 'developer1'@'127.0.0.1' IDENTIFIED BY 'db2db';
+CREATE USER 'developer1'@'127.0.0.1' IDENTIFIED BY 'db12db1';
 
 GRANT ALL PRIVILEGES ON *.* to 'developer1'@'127.0.0.1' WITH GRANT OPTION; # WITH GRANTS allows that this user can create further users and give them permissions
 ```

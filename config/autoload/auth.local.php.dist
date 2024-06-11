@@ -6,9 +6,9 @@ return [
     'authentication' => [
         'redirect' => '/app-login',
         'pdo'      => [
-            'dsn'             => 'mysql:host=1.1.1.1;port=3306;dbname=mydbname',
-            'username'        => 'myuser',
-            'password'        => 'mypassword',
+            'dsn'             => 'mysql:host=127.0.0.1;port=3306;dbname=mydbname',
+            'username'        => 'developer1',
+            'password'        => 'db12db1',
             'table'           => 'tajo1_user',
             'field'           => [
                 'identity' => 'user_name',

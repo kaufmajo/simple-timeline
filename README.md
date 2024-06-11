@@ -111,6 +111,12 @@ In my case, I use ports from this scope 888x
 $ vi /etc/apache2/ports.conf 
 ```
 
+Add ...
+```shell
+Listen 80
+Listen 8888
+```
+
 ### Install composer on Dev
 
 See instructions on https://getcomposer.org/
@@ -374,4 +380,10 @@ https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-
 
 
 
+## Tcp Udp ports listening
 
+Währende dem Setup der Server kann es nötig sein nachzuvollziehen auf welche Ports die Serverdienste hören.
+
+How to show listening tcp udp ports:
+
+$ ss -tulw | grep LISTEN

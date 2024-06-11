@@ -3,8 +3,8 @@
 return [
     'db' => [
         'driver' => 'Pdo',
-        'dsn' => 'mysql:host=1.1.1.1;port=3306;dbname=mydbname',
-        'user' => 'myuser',
-        'password' => 'mypassword'
+        'dsn' => 'mysql:host=127.0.0.1;port=3306;dbname=mydbname',
+        'user' => 'developer1',
+        'password' => 'password'
     ]
 ];
