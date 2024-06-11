@@ -63,9 +63,26 @@ $ apt-get install php8.3-gd
 $ apt-get install php8.3-intl
 $ apt-get install php8.3-tidy
 $ apt-get install php8.3-xml
-$ apt-get install php-zip
+$ apt-get install php8.3-zip
 $ apt-get install php8.3-xdebug # only required on dev server
 
+```
+
+## Install git on Debian
+
+```shell
+$ apt install git
+```
+
+```shell
+$ git config --global user.email "you@example.com"
+$ git config --global user.name "Your Name"
+```
+
+## Clone Repository in current directory
+
+```shell
+$ git clone https://github.com/kaufmajo/simple-timeline.git .
 ```
 
 ### Dev WSL Configuration
@@ -340,3 +357,7 @@ $ git commit -m "Untrack files in .gitignore"
 ## Managing remote repositories
 
 https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories
+
+
+
+
