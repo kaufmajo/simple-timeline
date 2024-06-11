@@ -219,14 +219,6 @@ $ php composer.phar self-update
 $ php composer.phar update
 ```
 
-## Repository
-
-### Clone Repository in current directory
-
-```shell
-$ git clone https://github.com/kaufmajo/simple-timeline.git .
-```
-
 ## Database
 
 ```shell
@@ -243,11 +235,21 @@ How to check mariadb version:
 $ mariadb -V
 ```
 
-## File-Persmission on Dev-Server
+## Application
+
+### Repository
+
+#### Clone Repository in current directory
+
+```shell
+$ git clone https://github.com/kaufmajo/simple-timeline.git .
+```
+
+### File-Persmission on Dev-Server
 
 https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
 
-### With Your user as owner
+#### With Your user as owner
 
 ```shell 
 $ cd /var/www/web1/
@@ -261,9 +263,7 @@ $ sudo find . -type f -exec chmod 664 {} \;
 $ sudo find . -type d -exec chmod 775 {} \;
 ```
 
-## Application
-
-### Set permission for special folders
+#### Set permission for special folders
 
 ```shell
 $ chown www-data /var/www/web1/data/cache -R
@@ -272,7 +272,7 @@ $ chown www-data /var/www/web1/data/media -R
 $ chown www-data /var/www/web1/data/temp -R
 ```
 
-### Set execution permission for scripts
+#### Set execution permission for scripts
 
 ```shell
 $ chmod u+x /var/www/web1/script/sync/stage_to_provider.sh
