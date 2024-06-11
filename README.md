@@ -1,55 +1,17 @@
 # simple-timeline
 
-## PHP
+## Server
 
-Version: 8.3
+Debian Bookworm
 
-## Database
-
-```shell
-$ ./script/sql/database
-$ ./script/sql/trigger
-$ ./script/sql/proc
-```
-
-## File-Persmission on Dev-Server
-
-https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
-
-### With Your user as owner
+### Install rsync 
 
 ```shell 
-$ cd /var/www/web1/
-$ sudo chown -R $USER:www-data .
+$ dpkg -s rsync # check if packet is already installed
+$ apt-get install rsync
 ```
 
-Then I give both myself and the webserver permissions:
-
-```shell 
-$ sudo find . -type f -exec chmod 664 {} \;   
-$ sudo find . -type d -exec chmod 775 {} \;
-```
-
-## Password
-
-```php
-<?php
-/**
- * We just want to hash our password using the current DEFAULT algorithm.
- * This is presently BCRYPT, and will produce a 60 character result.
- *
- * Beware that DEFAULT may change over time, so you would want to prepare
- * By allowing your storage to expand past 60 characters (255 would be good)
- */
-$mypassword = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
-?>
-```
-
-```sql
-INSERT INTO `tajo1_user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`) VALUES (2, 'admin', 'user@mail.com', 'mypassword', 'admin');
-```
-
-## Setup and Installation
+## Webserver
 
 ### Install Apache Webserver
 
@@ -61,77 +23,6 @@ $ apt-get install apache2
 
 ```shell
 $ a2enmod rewrite
-```
-
-### Install PHP
-
-```shell 
-$ apt-get install php libapache2-mod-php
-```
-
-### Install PHP Modules for Apache
-
-```shell
-$ apt-get install php8.3-mysql
-$ apt-get install php8.3-gd
-$ apt-get install php8.3-intl
-$ apt-get install php8.3-tidy
-$ apt-get install php8.3-xml
-$ apt-get install php8.3-zip
-$ apt-get install php8.3-xdebug # only required on dev server
-
-```
-
-## Install git on Debian
-
-```shell
-$ apt install git
-```
-
-```shell
-$ git config --global user.email "you@example.com"
-$ git config --global user.name "Your Name"
-```
-
-## Clone Repository in current directory
-
-```shell
-$ git clone https://github.com/kaufmajo/simple-timeline.git .
-```
-
-### Dev WSL Configuration
-
-#### Don't forget to change listen port on WSL
-
-If dev machine cant listen on port 80, just use another port:
-
-In my case, I use ports from this scope 888x
-
-```shell
-$ vi /etc/apache2/ports.conf 
-```
-
-Add ...
-```shell
-Listen 80
-Listen 8888
-```
-
-### Install composer on Dev
-
-See instructions on https://getcomposer.org/
-
-To update composer:
-
-```shell
-$ php composer.phar self-update
-```
-
-To update the application:
-
-```shell
-$ php composer.phar self-update
-$ php composer.phar update
 ```
 
 ### VHOSTS Example
@@ -194,6 +85,84 @@ $ a2dissite 020-web1.conf
 ### Activate SSL for website
 See instructions on https://letsencrypt.org/de/
 
+### Dev WSL Configuration
+
+#### Don't forget to change listen port on WSL
+
+If dev machine cant listen on port 80, just use another port:
+
+In my case, I use ports from this scope 888x
+
+```shell
+$ vi /etc/apache2/ports.conf 
+```
+
+Add ...
+```shell
+Listen 80
+Listen 8888
+```
+
+#### Activate German locale on WSL 
+
+Check if local is already installed:
+
+```shell
+$ locale -a
+```
+
+Show all supported locales:
+
+```shell
+$ less /usr/share/i18n/SUPPORTED
+```
+
+If local is missing, you have to generate it:
+
+```shell 
+$ sudo locale-gen de_CH.UTF-8
+```
+
+## PHP
+
+Version: 8.3
+
+### Install PHP
+
+```shell 
+$ apt-get install php libapache2-mod-php
+```
+
+### Install PHP Modules for Apache
+
+```shell
+$ apt-get install php8.3-mysql
+$ apt-get install php8.3-gd
+$ apt-get install php8.3-intl
+$ apt-get install php8.3-tidy
+$ apt-get install php8.3-xml
+$ apt-get install php8.3-zip
+$ apt-get install php8.3-xdebug # only required on dev server
+```
+
+### Update php.ini
+
+php.ini
+
+```shell
+post_max_size = 50M
+upload_max_filesize = 50M
+# max_execution_time 300
+```
+
+or you can set these values within the ".htaccess" file, which is located in the "public" folder:  
+
+```shell
+php_value post_max_size 50M
+php_value upload_max_filesize 50M
+#php_value max_execution_time 300
+```
+
 ### PHP Versions
 
 If you have to switch your php version:
@@ -218,27 +187,119 @@ sudo a2enmod php8.3
 sudo service apache2 restart 
 ```
 
-## Activate German locale on WSL 
+## Git
 
-Check if local is already installed:
-
-```shell
-$ locale -a
-```
-
-Show all supported locales:
+## Install git on Debian
 
 ```shell
-$ less /usr/share/i18n/SUPPORTED
+$ apt install git
 ```
 
-If local is missing, you have to generate it:
+```shell
+$ git config --global user.email "you@example.com"
+$ git config --global user.name "Your Name"
+```
+
+## Comnposer
+
+### Install composer on Dev
+
+See instructions on https://getcomposer.org/
+
+To update composer:
+
+```shell
+$ php composer.phar self-update
+```
+
+To update the application:
+
+```shell
+$ php composer.phar self-update
+$ php composer.phar update
+```
+
+## Repository
+
+### Clone Repository in current directory
+
+```shell
+$ git clone https://github.com/kaufmajo/simple-timeline.git .
+```
+
+## Database
+
+```shell
+$ ./script/sql/database
+$ ./script/sql/trigger
+$ ./script/sql/proc
+```
+
+### Mariadb Version
+
+How to check mariadb version:
+
+```shell
+$ mariadb -V
+```
+
+## File-Persmission on Dev-Server
+
+https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
+
+### With Your user as owner
 
 ```shell 
-$ sudo locale-gen de_CH.UTF-8
+$ cd /var/www/web1/
+$ sudo chown -R $USER:www-data .
 ```
 
-## Adapt console prompt
+Then I give both myself and the webserver permissions:
+
+```shell 
+$ sudo find . -type f -exec chmod 664 {} \;   
+$ sudo find . -type d -exec chmod 775 {} \;
+```
+
+## Application
+
+### Set permission for special folders
+
+```shell
+$ chown www-data /var/www/web1/data/cache -R
+$ chown www-data /var/www/web1/data/log -R
+$ chown www-data /var/www/web1/data/media -R
+$ chown www-data /var/www/web1/data/temp -R
+```
+
+### Set execution permission for scripts
+
+```shell
+$ chmod u+x /var/www/web1/script/sync/stage_to_provider.sh
+```
+
+### Password
+
+```php
+<?php
+/**
+ * We just want to hash our password using the current DEFAULT algorithm.
+ * This is presently BCRYPT, and will produce a 60 character result.
+ *
+ * Beware that DEFAULT may change over time, so you would want to prepare
+ * By allowing your storage to expand past 60 characters (255 would be good)
+ */
+$mypassword = password_hash("rasmuslerdorf", PASSWORD_DEFAULT);
+?>
+```
+
+```sql
+INSERT INTO `tajo1_user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_role`) VALUES (2, 'admin', 'user@mail.com', 'mypassword', 'admin');
+```
+
+## Misc
+
+### Adapt console prompt
 
 ```shell 
 $ cp ~/.bashrc ~/.bashrc.bak
@@ -250,7 +311,7 @@ Example - change line:
 PS1='debian_10_dev ${debian_chroot: ...
 ```
 
-## Tcp Udp ports listening 
+### Tcp Udp ports listening 
 
 How to show listening tcp udp ports:
 
@@ -258,102 +319,11 @@ How to show listening tcp udp ports:
 $ ss -tulw | grep LISTEN
 ```
 
-## Mariadb Version
+### Managing remote repositories
 
-How to check mariadb version:
+https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories
 
-```shell
-$ mariadb -V
-```
-
-## Secure copy Beispiele (scp)
-
-If it is a shell script, there is normally no need to configure the permission again 
-
-```shell
-$ scp -r root@server:/var/www/web1/data/media/* /var/www/web1/data/media/
-$ scp -r user1@server:/var/www/web1/data/* /var/www/web1/data/
-$ scp user1@server:/var/www/web1/config/autoload/production.local.php /var/www/web1/config/autoload/production.local.php
-```
-
-## Set permission for special folders
-
-```shell
-$ chown www-data /var/www/web1/data/cache -R
-$ chown www-data /var/www/web1/data/log -R
-$ chown www-data /var/www/web1/data/media -R
-$ chown www-data /var/www/web1/data/temp -R
-```
-
-## Set execution permission for scripts
-
-```shell
-$ chmod u+x /var/www/web1/script/sync/stage_to_provider.sh
-```
-
-## AuthUserFile für .htaccess Auth-Configuration
-
-Auth type = "Basic Auth"
-
-```shell 
-$ cd /srv/scripts/apache/passwd/basic
-```
-
-### Example
-
-soapme:$xxx1$xxxx.xxx$xxx
-
-#### .htaccess example
-
-```shell 
-AuthType basic
-AuthName "Authentication Required"
-AuthBasicProvider file
-AuthUserFile /srv/scripts/apache/passwd/basic
-Order deny,allow
-Deny from all
-Satisfy All
-Options -Indexes
-```
-
-## Install rsync 
-
-```shell 
-$ dpkg -s rsync # check if packet is already installed
-$ apt-get install rsync
-```
-
-## File and Folder permission on webserver for development
-
-Please see follow these notes:
-
-https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
-
-```shell
-$ sudo chown -R www-data:www-data /path/to/your/laravel/root/directory
-
-$ sudo usermod -a -G www-data user1
-```
-
-## Update php.ini
-
-php.ini
-
-```shell
-post_max_size = 50M
-upload_max_filesize = 50M
-# max_execution_time 300
-```
-
-or you can set these values within the ".htaccess" file, which is located in the "public" folder:  
-
-```shell
-php_value post_max_size 50M
-php_value upload_max_filesize 50M
-#php_value max_execution_time 300
-```
-
-## Why is .gitignore not ignoring my files?
+### Why is .gitignore not ignoring my files?
 
 The .gitignore file ensures that files not tracked by Git remain untracked.
 
@@ -374,16 +344,37 @@ Then commit your changes:
 $ git commit -m "Untrack files in .gitignore"
 ```
 
-## Managing remote repositories
+### AuthUserFile für .htaccess Auth-Configuration
 
-https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories
+Auth type = "Basic Auth"
 
+```shell 
+$ cd /srv/scripts/apache/passwd/basic
+```
 
+#### Example
 
-## Tcp Udp ports listening
+soapme:$xxx1$xxxx.xxx$xxx
 
-Währende dem Setup der Server kann es nötig sein nachzuvollziehen auf welche Ports die Serverdienste hören.
+##### .htaccess example
 
-How to show listening tcp udp ports:
+```shell 
+AuthType basic
+AuthName "Authentication Required"
+AuthBasicProvider file
+AuthUserFile /srv/scripts/apache/passwd/basic
+Order deny,allow
+Deny from all
+Satisfy All
+Options -Indexes
+```
 
-$ ss -tulw | grep LISTEN
+### Secure copy Beispiele (scp)
+
+If it is a shell script, there is normally no need to configure the permission again 
+
+```shell
+$ scp -r root@server:/var/www/web1/data/media/* /var/www/web1/data/media/
+$ scp -r user1@server:/var/www/web1/data/* /var/www/web1/data/
+$ scp user1@server:/var/www/web1/config/autoload/production.local.php /var/www/web1/config/autoload/production.local.php
+```
