@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Page\Home;
 
 use App\Page\AbstractBasePage;
-use App\Service\UrlpoolService;
 use App\Traits\Aware\DbRunnerAwareTrait;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\TextResponse;
@@ -31,9 +30,7 @@ class MngHomeReadPage extends AbstractBasePage
 
     public function indexAction(ServerRequestInterface $request): HtmlResponse
     {
-        $request
-        ->getAttribute(UrlpoolService::class)
-        ->save($request);
+        $this->getUrlpoolService()->save();
 
         // view
         $viewData = [

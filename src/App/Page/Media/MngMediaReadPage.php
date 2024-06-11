@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Page\Media;
 
 use App\Page\AbstractBasePage;
-use App\Service\UrlpoolService;
+use App\Service\HelperService;
 use App\Traits\Aware\FormStorageAwareTrait;
 use App\Traits\Aware\MediaRepositoryAwareTrait;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -22,9 +22,7 @@ class MngMediaReadPage extends AbstractBasePage
 
     public function indexAction(ServerRequestInterface $request): HtmlResponse
     {
-        $request
-        ->getAttribute(UrlpoolService::class)
-        ->save($request);
+        $this->getUrlpoolService()->save();
 
         // init
         $myInitConfig = $this->getMyInitConfig();
@@ -46,7 +44,7 @@ class MngMediaReadPage extends AbstractBasePage
         ];
 
         // check form
-        if (empty($_GET) || ! $mngMediaSearchForm->isValid()) {
+        if (empty($_GET) || !$mngMediaSearchForm->isValid()) {
             return new HtmlResponse($this->templateRenderer->render('app::mng/media/mng-media-read-index', $viewData));
         }
 
@@ -80,7 +78,7 @@ class MngMediaReadPage extends AbstractBasePage
         // view
         $viewData = [
             'myInitConfig' => $myInitConfig,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaIdParam),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaIdParam))->get(),
         ];
 
         // fetch media

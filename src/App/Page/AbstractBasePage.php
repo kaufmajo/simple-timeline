@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Page;
 
+use App\Service\UrlpoolService;
 use App\Traits\Aware\ConfigAwareTrait;
 use App\Traits\Aware\LoggerAwareTrait;
 use App\Traits\Aware\TemplateRendererAwareTrait;
+use App\Traits\Aware\UrlHelperAwareTrait;
+use App\Traits\Aware\UrlpoolServiceAwareTrait;
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
@@ -25,6 +28,10 @@ abstract class AbstractBasePage implements RequestHandlerInterface
 
     use TemplateRendererAwareTrait;
 
+    use UrlHelperAwareTrait;
+
+    use UrlpoolServiceAwareTrait;
+
     protected ?FlashMessagesInterface $flashMessages = null;
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -35,6 +42,8 @@ abstract class AbstractBasePage implements RequestHandlerInterface
 
             return new EmptyResponse(StatusCode::STATUS_NOT_FOUND);
         }
+
+        $this->setUrlpoolService($request->getAttribute(UrlpoolService::class));
 
         return $this->$action($request);
     }
@@ -48,4 +57,5 @@ abstract class AbstractBasePage implements RequestHandlerInterface
 
         return $this->flashMessages;
     }
+    
 }

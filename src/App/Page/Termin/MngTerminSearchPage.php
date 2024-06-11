@@ -6,7 +6,6 @@ namespace App\Page\Termin;
 
 use App\Model\Termin\TerminCollection;
 use App\Page\AbstractBasePage;
-use App\Service\UrlpoolService;
 use App\Traits\Aware\FormStorageAwareTrait;
 use App\Traits\Aware\TerminRepositoryAwareTrait;
 use Exception;
@@ -45,7 +44,7 @@ class MngTerminSearchPage extends AbstractBasePage
             'terminCollection'      => $terminCollection,
             'defTerminSearchForm'   => $defTerminSearchForm,
             'datalist'              => array_merge([['Sonntag'], ['Montag'], ['Dienstag'], ['Mittwoch'], ['Donnerstag'], ['Freitag'], ['Samstag']], $kategorieData, $betreffData, $mitvonData),
-            'redirectUrl'           => $request->getAttribute(UrlpoolService::class)->keep()->get(),
+            'redirectUrl'           => $this->getUrlpoolService()->get(),
         ];
 
         if (empty($_GET) || !$isFormValid) {

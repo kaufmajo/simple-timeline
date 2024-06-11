@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Page;
 
+use Mezzio\Helper\UrlHelper;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -25,5 +26,8 @@ class AbstractBasePageFactory
 
         // renderer
         $handler->setTemplateRenderer($container->get(TemplateRendererInterface::class));
+
+        // urlHelper
+        $handler->setUrlHelper($container->get(UrlHelper::class));
     }
 }

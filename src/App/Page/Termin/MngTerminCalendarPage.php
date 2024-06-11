@@ -7,7 +7,6 @@ namespace App\Page\Termin;
 use App\Model\Termin\TerminCollection;
 use App\Page\AbstractBasePage;
 use App\Service\HelperService;
-use App\Service\UrlpoolService;
 use App\Traits\Aware\FormStorageAwareTrait;
 use App\Traits\Aware\MediaRepositoryAwareTrait;
 use App\Traits\Aware\TerminRepositoryAwareTrait;
@@ -27,9 +26,7 @@ class MngTerminCalendarPage extends AbstractBasePage
 
     public function indexAction(ServerRequestInterface $request): HtmlResponse
     {
-        $request
-            ->getAttribute(UrlpoolService::class)
-            ->save($request);
+        $this->getUrlpoolService()->save();
 
         // param
         $dateParam = (string)($request->getQueryParams()['date'] ?? (new DateTime())->format('Y-m-d'));

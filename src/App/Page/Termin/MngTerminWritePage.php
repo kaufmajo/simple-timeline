@@ -11,14 +11,12 @@ use App\Model\Termin\TerminEntity;
 use App\Model\Termin\TerminEntityInterface;
 use App\Page\AbstractBasePage;
 use App\Service\HelperService;
-use App\Service\UrlpoolService;
 use App\Traits\Aware\FormStorageAwareTrait;
 use App\Traits\Aware\MediaCommandAwareTrait;
 use App\Traits\Aware\TerminCommandAwareTrait;
 use App\Traits\Aware\TerminRepositoryAwareTrait;
 use DateInterval;
 use DateTime;
-use Exception;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Diactoros\Response\TextResponse;
@@ -56,7 +54,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminForm'   => $terminForm,
             'terminEntity' => $terminEntity,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 
@@ -83,12 +81,9 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
     }
 
-    /**
-     * @throws Exception
-     */
     public function updateAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
     {
         // script will stop when ...
@@ -109,7 +104,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminEntity' => $terminEntity,
             'terminForm'   => $terminForm,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 
@@ -130,12 +125,9 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')))->get());
     }
 
-    /**
-     * @throws Exception
-     */
     public function copyAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
     {
         // script will stop when ...
@@ -159,7 +151,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminForm'   => $terminForm,
             'terminEntity' => $terminEntity,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 
@@ -181,12 +173,9 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')))->get());
     }
 
-    /**
-     * @throws Exception
-     */
     public function deleteAction(ServerRequestInterface $request): HtmlResponse|TextResponse|RedirectResponse
     {
         // init
@@ -207,7 +196,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         // redirect if confirmation is not given
         if (!isset($request->getParsedBody()['confirm']) || 'Löschen' !== $request->getParsedBody()['confirm']) {
-            return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()));
+            return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
         }
 
         // ok ... now execute delete
@@ -215,7 +204,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($terminEntity->getTerminDatumStart()));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
     }
 
     public function save(TerminEntityInterface $terminEntity, Form $terminForm): TerminEntityInterface

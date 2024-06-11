@@ -8,7 +8,6 @@ use App\Enum;
 use App\Model\Media\MediaEntity;
 use App\Page\AbstractBasePage;
 use App\Service\HelperService;
-use App\Service\UrlpoolService;
 use App\Traits\Aware\FormStorageAwareTrait;
 use App\Traits\Aware\MediaCommandAwareTrait;
 use App\Traits\Aware\MediaRepositoryAwareTrait;
@@ -53,7 +52,7 @@ class MngMediaWritePage extends AbstractBasePage
             'myInitConfig' => $myInitConfig,
             'mediaForm'    => $mediaForm,
             'mediaEntity'  => $mediaEntity,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->get(),
             'datalist'     => ['tag' => $tagData],
         ];
 
@@ -64,7 +63,7 @@ class MngMediaWritePage extends AbstractBasePage
         $mediaForm->setData(array_merge_recursive($request->getParsedBody(), $request->getUploadedFiles()));
 
         // process
-        if (! $mediaForm->isValid()) {
+        if (!$mediaForm->isValid()) {
             return new HtmlResponse($this->templateRenderer->render('app::mng/media/mng-media-write-insert', $viewData));
         }
 
@@ -76,12 +75,9 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
     }
 
-    /**
-     * @throws Exception
-     */
     public function updateAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
     {
         // script will stop when ...
@@ -111,7 +107,7 @@ class MngMediaWritePage extends AbstractBasePage
             'myInitConfig' => $myInitConfig,
             'mediaForm'    => $mediaForm,
             'mediaEntity'  => $mediaEntity,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get(),
             'datalist'     => ['tag' => $tagData],
         ];
 
@@ -129,7 +125,7 @@ class MngMediaWritePage extends AbstractBasePage
         ));
 
         // process
-        if (! $mediaForm->isValid()) {
+        if (!$mediaForm->isValid()) {
             return new HtmlResponse(
                 $this
                     ->templateRenderer
@@ -145,7 +141,7 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
     }
 
     /**
@@ -165,7 +161,7 @@ class MngMediaWritePage extends AbstractBasePage
         $viewData = [
             'myInitConfig' => $myInitConfig,
             'mediaEntity'  => $mediaEntity,
-            'redirectUrl'  => $request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get(),
         ];
 
         // ask for confirmation
@@ -176,10 +172,10 @@ class MngMediaWritePage extends AbstractBasePage
         // redirect if confirmation is not given
         if (
             $mediaIdParam !== (int) $request->getParsedBody()['id'] ||
-            ! isset($request->getParsedBody()['confirm']) ||
+            !isset($request->getParsedBody()['confirm']) ||
             'Löschen' !== $request->getParsedBody()['confirm']
         ) {
-            return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()));
+            return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
         }
 
         // ok ... now execute delete
@@ -187,7 +183,7 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($request->getAttribute(UrlpoolService::class)->keep()->getUrlWithAnchor($mediaEntity->getMediaId()));
+        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
     }
 
     public function getMediaForm(): Form
