@@ -16,6 +16,20 @@ $ ./script/sql/proc
 
 https://stackoverflow.com/questions/30639174/how-to-set-up-file-permissions-for-laravel
 
+### With Your user as owner
+
+```shell 
+$ cd /var/www/web1/
+$ sudo chown -R $USER:www-data .
+```
+
+Then I give both myself and the webserver permissions:
+
+```shell 
+$ sudo find . -type f -exec chmod 664 {} \;   
+$ sudo find . -type d -exec chmod 775 {} \;
+```
+
 ## Password
 
 ```php
