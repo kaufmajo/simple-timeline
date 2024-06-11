@@ -13,9 +13,10 @@ class UrlpoolService
     use LoggerAwareTrait;
     use UrlHelperAwareTrait;
 
-    private array $params = [];
-    private array $query = [];
-    private ?string $fragment = null;
+    protected array $params = [];
+    protected array $query = [];
+    protected bool $query_reset = false;
+    protected ?string $fragment = null;
 
     protected SessionInterface $session;
 
@@ -31,9 +32,10 @@ class UrlpoolService
         return $this;
     }
 
-    public function query(array $query = []): static
+    public function query(array $query = [], bool $reset = false): static
     {
         $this->query = $query;
+        $this->query_reset = $reset;
 
         return $this;
     }
@@ -62,7 +64,7 @@ class UrlpoolService
 
         $uri = unserialize($data[1]);
 
-        parse_str($uri->getQuery(), $query_array);
+        parse_str(!$this->query_reset ? $uri->getQuery() : '', $query_array);
 
         return $this->getUrlHelper()->generate($data[0], $this->params, array_merge($query_array, $this->query), $this->fragment);
     }

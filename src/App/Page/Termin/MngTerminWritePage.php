@@ -81,7 +81,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get());
+        return new RedirectResponse($this->getUrlpoolService()->query(['date' => $terminEntity->getTerminDatumStart()], reset: true)->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function updateAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
@@ -125,7 +125,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d'))->get());
+        return new RedirectResponse($this->getUrlpoolService()->query(['date' => $terminEntity->getTerminDatumStart()], reset: true)->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function copyAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
@@ -173,7 +173,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d'))->get());
+        return new RedirectResponse($this->getUrlpoolService()->query(['date' => $terminEntity->getTerminDatumStart()], reset: true)->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function deleteAction(ServerRequestInterface $request): HtmlResponse|TextResponse|RedirectResponse
@@ -204,7 +204,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get());
+        return new RedirectResponse($this->getUrlpoolService()->query(['date' => $terminEntity->getTerminDatumStart()], reset: true)->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function save(TerminEntityInterface $terminEntity, Form $terminForm): TerminEntityInterface
@@ -224,8 +224,7 @@ class MngTerminWritePage extends AbstractBasePage
                 $terminEntity->getTerminSerieEnde(),
                 $terminEntity->getTerminSerieWiederholung()
             )->getEndDate())
-            : new DateTime($terminEntity->getTerminDatumEnde()))
-            ->add(new DateInterval('P31D'))->format('Y-m-d');
+            : new DateTime($terminEntity->getTerminDatumEnde()))->add(new DateInterval('P31D'))->format('Y-m-d');
 
         // store media
         if (!$mediaEntity) {
