@@ -81,7 +81,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function updateAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
@@ -104,7 +104,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminEntity' => $terminEntity,
             'terminForm'   => $terminForm,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 
@@ -125,7 +125,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d'))->get());
     }
 
     public function copyAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
@@ -151,7 +151,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminForm'   => $terminForm,
             'terminEntity' => $terminEntity,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 
@@ -173,7 +173,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d')))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment((new DateTime($terminEntity->getTerminDatumStart()))->format('Y-m-d'))->get());
     }
 
     public function deleteAction(ServerRequestInterface $request): HtmlResponse|TextResponse|RedirectResponse
@@ -196,7 +196,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         // redirect if confirmation is not given
         if (!isset($request->getParsedBody()['confirm']) || 'Löschen' !== $request->getParsedBody()['confirm']) {
-            return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
+            return new RedirectResponse($this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get());
         }
 
         // ok ... now execute delete
@@ -204,7 +204,7 @@ class MngTerminWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('primary', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($terminEntity->getTerminDatumStart()))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get());
     }
 
     public function save(TerminEntityInterface $terminEntity, Form $terminForm): TerminEntityInterface

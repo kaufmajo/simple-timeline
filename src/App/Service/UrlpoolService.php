@@ -38,9 +38,9 @@ class UrlpoolService
         return $this;
     }
 
-    public function fragment(string $fragment = null): static
+    public function fragment(int|string|false|null $fragment = null): static
     {
-        $this->fragment = $fragment;
+        $this->fragment = $fragment ? 'anchor-' . $fragment : null;
 
         return $this;
     }
@@ -48,7 +48,7 @@ class UrlpoolService
     public function save(): static
     {
         $name = $this->getUrlHelper()->getRouteResult()->getMatchedRouteName();
-        
+
         $uri = $this->getUrlHelper()->getRequest()->getUri();
 
         $this->session->set('url', [$name, serialize($uri)]);

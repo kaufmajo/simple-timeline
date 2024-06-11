@@ -75,7 +75,7 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get());
     }
 
     public function updateAction(ServerRequestInterface $request): HtmlResponse|RedirectResponse
@@ -107,7 +107,7 @@ class MngMediaWritePage extends AbstractBasePage
             'myInitConfig' => $myInitConfig,
             'mediaForm'    => $mediaForm,
             'mediaEntity'  => $mediaEntity,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get(),
             'datalist'     => ['tag' => $tagData],
         ];
 
@@ -141,7 +141,7 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get());
     }
 
     /**
@@ -161,7 +161,7 @@ class MngMediaWritePage extends AbstractBasePage
         $viewData = [
             'myInitConfig' => $myInitConfig,
             'mediaEntity'  => $mediaEntity,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get(),
         ];
 
         // ask for confirmation
@@ -175,7 +175,7 @@ class MngMediaWritePage extends AbstractBasePage
             !isset($request->getParsedBody()['confirm']) ||
             'Löschen' !== $request->getParsedBody()['confirm']
         ) {
-            return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
+            return new RedirectResponse($this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get());
         }
 
         // ok ... now execute delete
@@ -183,7 +183,7 @@ class MngMediaWritePage extends AbstractBasePage
 
         $this->flashMessages($request)->flash('info', 'default');
 
-        return new RedirectResponse($this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaEntity->getMediaId()))->get());
+        return new RedirectResponse($this->getUrlpoolService()->fragment($mediaEntity->getMediaId())->get());
     }
 
     public function getMediaForm(): Form

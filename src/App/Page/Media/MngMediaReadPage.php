@@ -78,7 +78,7 @@ class MngMediaReadPage extends AbstractBasePage
         // view
         $viewData = [
             'myInitConfig' => $myInitConfig,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment(HelperService::getAnchorString($mediaIdParam))->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->fragment($mediaIdParam)->get(),
         ];
 
         // fetch media
