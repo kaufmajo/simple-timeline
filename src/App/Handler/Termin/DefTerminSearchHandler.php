@@ -39,7 +39,7 @@ class DefTerminSearchHandler extends AbstractDefTerminHandler
             'terminCollection'      => $terminCollection,
             'defTerminSearchForm'   => $defTerminSearchForm,
             'datalist'              => array_merge([['Sonntag'], ['Montag'], ['Dienstag'], ['Mittwoch'], ['Donnerstag'], ['Freitag'], ['Samstag']], $kategorieData, $betreffData, $mitvonData),
-            'redirectUrl'           => $request->getAttribute(UrlpoolService::class)->keep()->get(),
+            'redirectUrl'           => $this->getUrlpoolService()->get(),
         ];
 
         if (empty($_GET) || !$isFormValid) {

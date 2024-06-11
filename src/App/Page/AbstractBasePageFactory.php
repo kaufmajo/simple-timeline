@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Page;
 
+use App\Service\UrlpoolService;
 use Mezzio\Helper\UrlHelper;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -29,5 +30,8 @@ class AbstractBasePageFactory
 
         // urlHelper
         $handler->setUrlHelper($container->get(UrlHelper::class));
+
+        // urlpoolService
+        $handler->setUrlpoolService($handler->getUrlHelper()->getRequest()->getAttribute(UrlpoolService::class));
     }
 }

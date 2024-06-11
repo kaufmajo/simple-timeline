@@ -18,9 +18,7 @@ class DefTerminCalendarHandler extends AbstractDefTerminHandler
 {
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $request
-            ->getAttribute(UrlpoolService::class)
-            ->save($request);
+        $this->getUrlpoolService()->save();
 
         // param
         $dateParam = (string)($request->getQueryParams()['date'] ?? (new DateTime())->format('Y-m-d'));

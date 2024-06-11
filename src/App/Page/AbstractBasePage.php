@@ -43,8 +43,6 @@ abstract class AbstractBasePage implements RequestHandlerInterface
             return new EmptyResponse(StatusCode::STATUS_NOT_FOUND);
         }
 
-        $this->setUrlpoolService($request->getAttribute(UrlpoolService::class));
-
         return $this->$action($request);
     }
 
