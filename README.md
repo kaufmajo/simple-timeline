@@ -63,6 +63,7 @@ $ apt-get install php8.3-gd
 $ apt-get install php8.3-intl
 $ apt-get install php8.3-tidy
 $ apt-get install php8.3-xml
+$ apt-get install php-zip
 $ apt-get install php8.3-xdebug # only required on dev server
 
 ```
@@ -107,10 +108,10 @@ $ php composer.phar update
         # match this virtual host. For the default virtual host (this file) this
         # value is not decisive as it is used as a last resort host regardless.
         # However, you must set it for any further virtual host explicitly.
-        #ServerName jk1.dev.dev
+        #ServerName web1.dev.dev
 
         ServerAdmin webmaster@localhost
-        DocumentRoot /var/www/jk1/public
+        DocumentRoot /var/www/web1/public
 
         # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
         # error, crit, alert, emerg.
@@ -129,7 +130,7 @@ $ php composer.phar update
         #Include conf-available/serve-cgi-bin.conf
 
 
-        <Directory /var/www/jk1/public>
+        <Directory /var/www/web1/public>
                 DirectoryIndex index.php
                 AllowOverride All
                 Order allow,deny
@@ -233,24 +234,24 @@ $ mariadb -V
 If it is a shell script, there is normally no need to configure the permission again 
 
 ```shell
-$ scp -r root@server:/var/www/jk1/data/media/* /var/www/jk1/data/media/
-$ scp -r user1@server:/var/www/jk1/data/* /var/www/jk1/data/
-$ scp user1@server:/var/www/jk1/config/autoload/production.local.php /var/www/jk1/config/autoload/production.local.php
+$ scp -r root@server:/var/www/web1/data/media/* /var/www/web1/data/media/
+$ scp -r user1@server:/var/www/web1/data/* /var/www/web1/data/
+$ scp user1@server:/var/www/web1/config/autoload/production.local.php /var/www/web1/config/autoload/production.local.php
 ```
 
 ## Set permission for special folders
 
 ```shell
-$ chown www-data /var/www/jk1/data/cache -R
-$ chown www-data /var/www/jk1/data/log -R
-$ chown www-data /var/www/jk1/data/media -R
-$ chown www-data /var/www/jk1/data/temp -R
+$ chown www-data /var/www/web1/data/cache -R
+$ chown www-data /var/www/web1/data/log -R
+$ chown www-data /var/www/web1/data/media -R
+$ chown www-data /var/www/web1/data/temp -R
 ```
 
 ## Set execution permission for scripts
 
 ```shell
-$ chmod u+x /var/www/jk1/script/sync/stage_to_provider.sh
+$ chmod u+x /var/www/web1/script/sync/stage_to_provider.sh
 ```
 
 ## AuthUserFile für .htaccess Auth-Configuration

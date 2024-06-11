@@ -31,7 +31,7 @@ date_default_timezone_set('Europe/Zurich');
 // define application environment
 if (
     isset($_SERVER['HTTP_HOST']) &&
-    ($_SERVER['HTTP_HOST'] === 'jk1.development.net:8889')
+    ($_SERVER['HTTP_HOST'] === 'web1.development.net:8889')
 ) {
     // error handling for development
     error_reporting(E_ALL & ~E_USER_DEPRECATED & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE);
@@ -39,7 +39,7 @@ if (
 
     // app settings for development
     define('APPLICATION_ENV', 'development');
-    define('APPLICATION_HOST', 'jk1.development.net');
+    define('APPLICATION_HOST', 'web1.development.net');
     setlocale(LC_TIME, "de_CH.UTF8");
 } else {
     // error handling for development
