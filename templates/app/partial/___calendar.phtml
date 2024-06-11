@@ -169,8 +169,10 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                                     <?php if (!$termin['termin_zeige_konflikt']) : ?>
                                         <!-- <span class="badge bg-warning-subtle text-warning-emphasis fw-bold mt-1 text-decoration-line-through">Konfliktanzeige</span> -->
                                     <?php endif; ?>
+                                </div>
+                                <?php if ($loggedIn) : ?>
                                     <div class="dropdown">
-                                        <button class="ps-0 btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="ps-0 btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-list"></i>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -179,7 +181,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                                             <li><a class="dropdown-item" href="/manage/termin-write/delete/<?= $termin['termin_id'] ?>">Löschen</a></li>
                                         </ul>
                                     </div>
-                                </div>
+                                <?php endif ?>
                             <?php endif ?>
                         </div>
                     </div>
