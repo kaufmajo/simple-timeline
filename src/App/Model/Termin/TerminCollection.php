@@ -62,6 +62,11 @@ class TerminCollection extends AbstractCollection
         return false;
     }
 
+    public function isDatumFirstDayOfMonth(): bool
+    {
+        return 1 === (int) $this->getDatum()->format('j');
+    }
+
     public function isDatumToday(): bool
     {
         return $this->getDatum()->format('Y-m-d') === (new DateTime())->format('Y-m-d');
