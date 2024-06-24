@@ -60,11 +60,11 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                                 <?php if ($terminCollection->isDatumToday()) : ?>
                                     <span class="badge text-bg-warning fw-bold">Heute</span>
                                 <?php else : ?>
-                                    <?php if ($terminCollection->isFirst() || $terminCollection->isDatumFirstDayOfMonth()) : ?>
+                                    <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
                                         <i class="bi bi-caret-right-fill text-warning d-none d-xxl-inline-block"></i>
                                     <?php endif ?>
                                     <span><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
-                                    <?php if ($terminCollection->isFirst() || $terminCollection->isDatumFirstDayOfMonth()) : ?>
+                                    <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
                                         <span class="d-none d-xxl-inline-block">
                                             <?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?>
                                         </span>
