@@ -136,6 +136,8 @@ $ apt-get install php libapache2-mod-php
 ### Install PHP Modules for Apache
 
 ```shell
+$ apt-get install php8.3-mbstring
+$ apt-get install php8.3-curl
 $ apt-get install php8.3-mysql
 $ apt-get install php8.3-gd
 $ apt-get install php8.3-intl
