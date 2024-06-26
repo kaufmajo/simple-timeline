@@ -50,8 +50,8 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
             ?>
             <?php if ($terminCollection->isFirst() || $terminCollection->current['datum_datum'] !== $terminCollection->previous['datum_datum']) : ?>
                 <?php
-                $listClass = $terminCollection->isDatumSunday() ? 'bg-body-tertiary' : 'bg-light-subtle';
-                $listClass .= !$terminCollection->isDatumWithinReferenceMonth() ? ' d-none d-xxl-block' : '';
+                $listClass = $terminCollection->isDatumSunday() ? 'bg-body-tertiary' : ($terminCollection->isDatumWithinReferenceMonth() ? 'bg-light-subtle' : 'bg-body-tertiary');
+                $listClass .= !$terminCollection->isDatumWithinReferenceMonth() ? ' d-none d-xxl-block opacity-75' : '';
                 ?>
                 <li class="position-relative p-2 <?= $listClass ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
                     <div class="d-flex justify-content-between w-100">
