@@ -20,13 +20,15 @@
         let theme = (new URL(document.location)).searchParams.get("theme");
         if ('light' === theme || 'dark' === theme) {
             sessionStorage.setItem('theme', theme);
+        } else if (sessionStorage.getItem('theme')) {
+            theme = sessionStorage.getItem('theme');
         } else if (!sessionStorage.getItem('theme')) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-                sessionStorage.setItem('theme', 'dark');
+                theme = 'dark';
             else
-                sessionStorage.setItem('theme', 'light');
+                theme = 'light';
         }
-        document.documentElement.setAttribute('data-bs-theme', sessionStorage.getItem('theme'));
+        document.documentElement.setAttribute('data-bs-theme', theme);
     </script>
     <script defer src="/js/main.js?u=<?= REFRESH_STATIC_FILES ?>"></script>
     <!-- JavaScript Bundle with Popper -->
