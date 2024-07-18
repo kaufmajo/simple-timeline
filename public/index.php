@@ -15,7 +15,7 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
 // start custom bootstrap code
 // -------------------------
 
-const REFRESH_STATIC_FILES = '20';
+const REFRESH_STATIC_FILES = '21';
 
 function ddd(mixed $var): never
 {
