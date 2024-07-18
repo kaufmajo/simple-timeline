@@ -1,3 +1,7 @@
+html {
+    scroll-padding-top: 120px;
+}
+
 ol {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -22,6 +26,7 @@ ol>li {
 @media (min-width: 1400px) {
     ol {
         grid-template-columns: repeat(7, 1fr);
+        height: calc(100vh - 176px);
     }
 
     .calendar {

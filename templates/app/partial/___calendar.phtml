@@ -19,12 +19,12 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
 
 ?>
 <!-- container -->
-<div class="container-fluid calendar p-0 bg-primary">
-    <div class="fs-1 d-flex align-items-center justify-content-between py-4 mx-3">
+<div class="container-fluid calendar p-0">
+    <div class="fs-1 d-flex align-items-center justify-content-between py-4 px-3 mx-0 sticky-top text-bg-primary">
         <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
             <i class="bi bi-caret-left-fill"></i>
         </a>
-        <span class="fw-bold text-bg-primary">
+        <span class="fw-bold">
             <?php if ($terminCollection->isReferenzThisYear()) : ?>
                 <?= $this->escape(DTF::format($terminCollection->getReferenzDatum(), "LLLL")) ?>
             <?php else : ?>
@@ -69,7 +69,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                                             <?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?>
                                         </span>
                                     <?php endif ?>
-                                    <span class="ms-1 d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
+                                    <span class="ms-1 d-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?></span>
                                 <?php endif ?>
                             </div>
                             <div class="d-xxl-none">
@@ -199,7 +199,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
             <?php endif ?>
         <?php endforeach ?>
     </ol>
-    <div class="d-xxl-none fs-1 d-flex align-items-center justify-content-between py-1 mx-3">
+    <div class="sticky-bottom fs-1 d-flex align-items-center justify-content-between py-1 px-3 mx-0 text-bg-primary">
         <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
             <i class="bi bi-caret-left-fill"></i>
         </a>
