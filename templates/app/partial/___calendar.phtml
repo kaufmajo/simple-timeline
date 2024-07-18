@@ -198,12 +198,4 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
             <?php endif ?>
         <?php endforeach ?>
     </ol>
-    <div class="sticky-bottom fs-1 d-flex align-items-center justify-content-between py-1 px-3 mx-0 text-bg-primary">
-        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
-            <i class="bi bi-caret-left-fill"></i>
-        </a>
-        <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of next month')->format('Y-m-d') ?>">
-            <i class="bi bi-caret-right-fill"></i>
-        </a>
-    </div>
 </div>
