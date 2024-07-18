@@ -20,7 +20,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
 ?>
 <!-- container -->
 <div class="container-fluid calendar p-0">
-    <div class="fs-1 d-flex align-items-center justify-content-between py-4 px-3 mx-0 sticky-top text-bg-primary">
+    <div class="fs-1 d-flex align-items-center justify-content-between py-1 py-xxl-4 px-3 mx-0 sticky-top text-bg-primary">
         <a class="link-light text-decoration-none" href="<?= $prevnextUrl ?>?date=<?= (new DateTime($dateParam))->modify('first day of last month')->format('Y-m-d') ?>">
             <i class="bi bi-caret-left-fill"></i>
         </a>

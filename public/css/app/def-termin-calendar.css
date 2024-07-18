@@ -1,5 +1,5 @@
 html {
-    scroll-padding-top: 120px;
+    scroll-padding-top: 80px;
 }
 
 ol {
@@ -24,6 +24,11 @@ ol>li {
 }
 
 @media (min-width: 1400px) {
+
+    html {
+        scroll-padding-top: 120px;
+    }
+
     ol {
         grid-template-columns: repeat(7, 1fr);
         height: calc(100vh - 108px);
