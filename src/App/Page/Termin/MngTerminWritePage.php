@@ -104,7 +104,7 @@ class MngTerminWritePage extends AbstractBasePage
             'myInitConfig' => $this->getMyInitConfig(),
             'terminEntity' => $terminEntity,
             'terminForm'   => $terminForm,
-            'redirectUrl'  => $this->getUrlpoolService()->fragment($terminEntity->getTerminDatumStart())->get(),
+            'redirectUrl'  => $this->getUrlpoolService()->query(['date' => $terminEntity->getTerminDatumStart()], reset: true)->fragment($terminEntity->getTerminDatumStart())->get(),
             'datalist'     => ['mitvon' => $mitvonData, 'kategorie' => $kategorieData, 'betreff' => $betreffData, 'link' => $linkData, 'link_titel' => $linkTitelData, 'image' => $imageData],
         ];
 

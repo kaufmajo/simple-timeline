@@ -15,6 +15,7 @@ ol>li {
     justify-content: flex-start;
     list-style: none;
     min-height: 100px;
+    overflow-y: auto;
 }
 
 @media (min-width: 768px) {
