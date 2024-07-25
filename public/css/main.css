@@ -16,10 +16,10 @@ html {
     scroll-behavior: smooth;
 }
 
-body {
+/* body {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
-}
+} */
 
 del,
 mark {

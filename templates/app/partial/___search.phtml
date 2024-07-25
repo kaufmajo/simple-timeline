@@ -17,12 +17,16 @@ $event_nav = $manage ? '/manage/termin-calendar' : '/';
 $elementAttributeService = new AttributeService([], $attributes ?? []);
 
 ?>
-<div class="container">
-    <div class="position-absolute top-0 end-0 m-3">
-        <a class="link-body-emphasis text-decoration-none" href="<?= $redirectUrl ?>"><i class="bi bi-x-lg fs-1"></i></a>
+<div class="container-fluid p-0">
+    <div class="fs-1 d-flex align-items-center justify-content-center py-1 px-3 mx-0 sticky-top text-bg-primary">
+        <div class="position-absolute top-0 end-0 mt-1 me-3">
+            <a class="link-light text-decoration-none" style="color: red;" href="<?= $redirectUrl ?>"><i class="bi bi-x-lg fs-1"></i></a>
+        </div>
+        <span class="fw-bold">
+            Suchen
+        </span>
     </div>
-    <h1 class="text-center mt-5 fw-bold">Suchen</h1>
-    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 px-3">
         <div class="my-5">
             <?php if ($form->getMessages()) : ?>
                 <?php $this->insert('partial::formerror', ['form' => $form, 'showMessages' => false]); ?>
