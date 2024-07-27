@@ -1,0 +1,20 @@
+html {
+    scroll-padding-top: 80px;
+}
+
+@media (min-width: 768px) {
+    .calendar {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1400px) {
+
+    html {
+        scroll-padding-top: 120px;
+    }
+
+    .calendar {
+        width: 100%;
+    }
+}
