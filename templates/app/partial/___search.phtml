@@ -26,7 +26,7 @@ $elementAttributeService = new AttributeService([], $attributes ?? []);
             Suchen
         </span>
     </div>
-    <div class="col-12 offset-xxl-3 col-xxl-6 px-1">
+    <div class="col-12 offset-xxl-3 col-xxl-6 p-2">
         <div class="my-5">
             <?php if ($form->getMessages()) : ?>
                 <?php $this->insert('partial::formerror', ['form' => $form, 'showMessages' => false]); ?>
