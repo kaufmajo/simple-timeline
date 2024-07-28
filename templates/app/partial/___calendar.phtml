@@ -84,7 +84,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                     ?>
                     <?php if ($termin['termin_image'] && $terminCollection->fromMemory('image', $termin['termin_id'])) : ?>
                         <a href="/show/<?= $this->escape($termin['termin_id']) ?>?back=<?= $prevnextUrl ?>" class="<?= $linkColor ?> text-decoration-none" <?= HelperService::getAnchorAttribute($terminCollection->fromMemory('anchor', $termin['termin_id'])) ?>>
-                            <img class="d-block d-xxl-none my-2 w-100" src="<?= $this->media($termin['termin_image']) ?>?w=1200" alt="Thumbnail">
+                            <img class="d-block d-xxl-none my-2 w-100" src="<?= $this->media($termin['termin_image']) ?>?w=1400" alt="Thumbnail">
                         </a>
                     <?php endif ?>
                     <div class="body-text fs-3 fw-light py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">

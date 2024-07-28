@@ -23,7 +23,7 @@ $terminEntity = $terminEntity;
         </script>
     <?php endif; ?>
     <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
-        <div class="m-1 text-center" style="max-width: 1200px;">
+        <div class="m-1 text-center" style="max-width: 1400px;">
             <h3 class="fw-light">
                 <?= $this->escape(HelperService::format_displayDate($terminEntity->getTerminDatumstart(), $terminEntity->getTerminDatumEnde())) ?>
                 <?php if (!$terminEntity->getTerminZeitGanztags()) : ?>

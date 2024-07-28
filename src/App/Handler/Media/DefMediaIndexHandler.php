@@ -65,7 +65,7 @@ class DefMediaIndexHandler implements RequestHandlerInterface
             $cacheConfig = $this->getMyInitConfig('cache');
 
             // return thumb or original
-            if (0 < $widthParam && 1200 >= $widthParam) {
+            if (0 < $widthParam && 1400 >= $widthParam) {
                 if (!MediaStorageProvider::isThumbInStorage($mediaEntity, $widthParam)) {
                     
                     ThumbService::createThumbnail(
