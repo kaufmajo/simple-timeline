@@ -54,26 +54,22 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                 $listClass .= !$terminCollection->isDatumWithinReferenceMonth() ? ' d-none d-xxl-block' : '';
                 ?>
                 <li class="position-relative p-2 <?= $listClass ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
-                    <div class="d-flex justify-content-between w-100">
-                        <div class="d-flex justify-content-between w-100 fw-light text-body-secondary">
-                            <div>
-                                <?php if ($terminCollection->isDatumToday()) : ?>
-                                    <span class="badge text-bg-warning fw-bold">Heute</span>
-                                <?php else : ?>
-                                    <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
-                                        <i class="bi bi-caret-right-fill text-warning d-none d-xxl-inline-block"></i>
-                                    <?php endif ?>
-                                    <span><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
-                                    <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
-                                        <span class="d-none d-xxl-inline-block">
-                                            <?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?>
-                                        </span>
-                                    <?php endif ?>
+                    <div class="d-flex justify-content-between w-100 fw-light text-body-secondary">
+                        <div>
+                            <?php if ($terminCollection->isDatumToday()) : ?>
+                                <span class="badge text-bg-warning fw-bold">Heute</span>
+                            <?php else : ?>
+                                <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
+                                    <i class="bi bi-caret-right-fill text-warning d-none d-xxl-inline-block"></i>
                                 <?php endif ?>
-                            </div>
-                            <div class="d-xxl-none">
-                                <?= $this->escape(DTF::format($terminCollection->getDatum(), 'eeee')) ?>
-                            </div>
+                                <span class="me-1"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'd')) ?></span>
+                                <span class="d-xxl-none"><?= $this->escape(DTF::format($terminCollection->getDatum(), 'eeee')) ?></span>
+                                <?php if ($terminCollection->isDatumFirstDayOfMonth()) : ?>
+                                    <span class="d-none d-xxl-inline-block">
+                                        <?= $this->escape(DTF::format($terminCollection->getDatum(), 'MMMM')) ?>
+                                    </span>
+                                <?php endif ?>
+                            <?php endif ?>
                         </div>
                         <?php if ($loggedIn) : ?>
                             <a class="link-secondary" href="/manage/termin-write/insert/<?= $terminCollection->getDatum()->format('Y-m-d') ?>" title="Anlegen"><i class="bi bi-plus-circle ms-2"></i></a>
