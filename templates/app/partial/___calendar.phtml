@@ -53,7 +53,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                 $listClass = $terminCollection->isDatumSunday() ? 'bg-body-tertiary' : ($terminCollection->isDatumWithinReferenceMonth() ? 'bg-light-subtle' : 'bg-light-subtle');
                 $listClass .= !$terminCollection->isDatumWithinReferenceMonth() ? ' d-none d-xxl-block' : '';
                 ?>
-                <li class="position-relative p-2 <?= $listClass ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
+                <li class="p-2 <?= $listClass ?>" <?= HelperService::getAnchorAttribute($termin['datum_datum']) ?>>
                     <div class="d-flex justify-content-between w-100 fw-light text-body-secondary">
                         <div>
                             <?php if ($terminCollection->isDatumToday()) : ?>
@@ -87,7 +87,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                             <img class="d-block d-xxl-none my-2 w-100" src="<?= $this->media($termin['termin_image']) ?>?w=1200" alt="Thumbnail">
                         </a>
                     <?php endif ?>
-                    <div class="py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">
+                    <div class="fs-3 fw-light py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">
                         <div class="me-2 text-secondary" style="min-width: 40px;">
                             <?php if (!$termin['termin_zeit_ganztags']) : ?>
                                 <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) ?>
