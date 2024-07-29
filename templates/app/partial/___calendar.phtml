@@ -88,7 +88,7 @@ $loggedIn = isset($this->data['security']) ? $this->data['security']->getIdentit
                         </a>
                     <?php endif ?>
                     <div class="body-text fs-3 fw-light py-2 <?php if (!$termin['termin_zeit_ganztags']) : ?>d-flex<?php endif ?>">
-                        <div class="me-2 text-secondary" style="min-width: 40px;">
+                        <div class="me-2 text-secondary">
                             <?php if (!$termin['termin_zeit_ganztags']) : ?>
                                 <?= $this->escape(substr($termin['termin_zeit_start'], 0, 5)) ?>
                             <?php endif; ?>
