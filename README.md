@@ -371,7 +371,7 @@ Satisfy All
 Options -Indexes
 ```
 
-### Secure copy Beispiele (scp)
+### Secure copy Example (scp)
 
 If it is a shell script, there is normally no need to configure the permission again 
 
